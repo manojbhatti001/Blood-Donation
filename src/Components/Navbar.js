@@ -32,27 +32,23 @@ const Navbar = () => {
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-white shadow-lg border-b-4 border-red-600' 
-          : 'bg-gradient-to-b from-black/70 to-black/0'
+          : 'bg-red-600'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center group">
               <img 
-                src={isScrolled ? "/images/logo.png" : "/images/logo-white.png"}
-                alt="Logo" 
-                className="h-12 w-12 transition-all duration-300 hover:scale-110"
-              />
-              <span 
-                className={`text-2xl font-bold transition-all duration-300 ${
-                  isScrolled 
-                    ? 'text-red-600' 
-                    : 'text-white'
+                src="/images/logo1.png"
+                alt="Blood Donation Logo" 
+                className={`h-30 w-40 mt-10 transition-all duration-300 group-hover:scale-110 ${
+                  isScrolled ? 'brightness-0' : 'brightness-0'
                 }`}
-              >
-                Blood Donation
-              </span>
+                style={{ 
+                  filter: isScrolled ? 'none' : 'drop-shadow(0 0 4px rgba(255,255,255,0.5))'
+                }}
+              />
             </Link>
           </div>
 
@@ -63,10 +59,10 @@ const Navbar = () => {
                 to="/"
                 className={`group px-4 py-2 rounded-md text-base font-medium transition-all duration-300 ${
                   isActivePath('/') 
-                    ? isScrolled ? 'text-red-600' : 'text-red-400' 
+                    ? isScrolled ? 'text-red-600' : 'text-white' 
                     : isScrolled 
                       ? 'text-gray-700 hover:text-red-600' 
-                      : 'text-white hover:text-red-400'
+                      : 'text-white hover:text-red-200'
                 }`}
               >
                 <span className="relative">
@@ -80,10 +76,10 @@ const Navbar = () => {
                 to="/emergency-blood"
                 className={`group px-4 py-2 rounded-md text-base font-medium transition-all duration-300 ${
                   isActivePath('/emergency-blood') 
-                    ? isScrolled ? 'text-red-600' : 'text-red-400'
+                    ? isScrolled ? 'text-red-600' : 'text-white'
                     : isScrolled 
                       ? 'text-gray-700 hover:text-red-600' 
-                      : 'text-white hover:text-red-400'
+                      : 'text-white hover:text-red-200'
                 }`}
               >
                 <span className="relative">
@@ -97,10 +93,10 @@ const Navbar = () => {
                 to="/volunteer"
                 className={`group px-4 py-2 rounded-md text-base font-medium transition-all duration-300 ${
                   isActivePath('/volunteer') 
-                    ? isScrolled ? 'text-red-600' : 'text-red-400'
+                    ? isScrolled ? 'text-red-600' : 'text-white'
                     : isScrolled 
                       ? 'text-gray-700 hover:text-red-600' 
-                      : 'text-white hover:text-red-400'
+                      : 'text-white hover:text-red-200'
                 }`}
               >
                 <span className="relative">

@@ -1,5 +1,5 @@
 import { AlertCircle, Clock, MapPin, Phone, CheckCircle, Search, Hospital } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { AnimatedSection, fadeIn, slideIn } from "./Animation"
 import { toast } from 'react-hot-toast'
@@ -7,6 +7,12 @@ import { useNavigate } from 'react-router-dom'
 
 export default function EmergencyBlood() {
   const navigate = useNavigate()
+  
+  // Add useEffect to scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const [formData, setFormData] = useState({
     bloodType: "",
     requestorName: "",
@@ -63,36 +69,36 @@ export default function EmergencyBlood() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-20">
       <motion.section 
-        className="bg-red-600 text-white py-12"
+        className="bg-red-600 text-white py-16"
         initial="initial"
         animate="animate"
         variants={fadeIn}
       >
         <div className="container px-4 mx-auto">
           <motion.div 
-            className="flex items-center justify-center space-x-3 mb-6"
+            className="flex items-center justify-center space-x-3 mb-8"
             variants={slideIn}
           >
             <AlertCircle className="w-12 h-12 animate-pulse" />
-            <h1 className="text-4xl font-bold">Emergency Blood Request</h1>
+            <h1 className="text-4xl md:text-5xl font-bold">Emergency Blood Request</h1>
           </motion.div>
           <motion.div className="flex justify-center gap-4 mt-8">
             <button
-              className="bg-white text-red-600 px-6 py-2 rounded-full font-medium hover:bg-red-50 transition-colors"
+              className="bg-white text-red-600 px-8 py-3 rounded-full font-medium hover:bg-red-50 transition-colors shadow-lg"
               onClick={() => navigate('/search-requests')}
             >
-              <Search className="w-4 h-4 inline-block mr-2" />
+              <Search className="w-5 h-5 inline-block mr-2" />
               Search Existing Requests
             </button>
           </motion.div>
         </div>
       </motion.section>
 
-      <AnimatedSection className="py-12">
-        <div className="container px-4 mx-auto">
-          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <AnimatedSection>
+        <div className="container px-4 mx-auto py-16">
+          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Blood Type Selection */}
               <div>
@@ -114,7 +120,7 @@ export default function EmergencyBlood() {
               </div>
 
               {/* Requestor Information */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
                     Requestor Name <span className="text-red-500">*</span>
@@ -130,7 +136,7 @@ export default function EmergencyBlood() {
                   />
                 </div>
                 
-                <div>
+                <div className="mt-4">
                   <label className="block text-gray-700 font-medium mb-2">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
@@ -147,7 +153,7 @@ export default function EmergencyBlood() {
               </div>
 
               {/* Location Information */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
                     City <span className="text-red-500">*</span>
@@ -163,7 +169,7 @@ export default function EmergencyBlood() {
                   />
                 </div>
                 
-                <div>
+                <div className="mt-4">
                   <label className="block text-gray-700 font-medium mb-2">
                     Hospital Name <span className="text-red-500">*</span>
                   </label>
@@ -234,9 +240,9 @@ export default function EmergencyBlood() {
       </AnimatedSection>
 
       {/* Process Section */}
-      <AnimatedSection className="py-12 bg-gray-100">
-        <div className="container px-4 mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+      <AnimatedSection>
+        <div className="container px-4 mx-auto py-16 bg-gray-50">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">How It Works</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <ProcessCard
               icon={<Clock className="w-8 h-8 text-red-600" />}
@@ -263,14 +269,14 @@ export default function EmergencyBlood() {
 function ProcessCard({ icon, title, description }) {
   return (
     <motion.div 
-      className="bg-white p-6 rounded-lg shadow-md text-center"
+      className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300"
       whileHover={{ y: -5 }}
     >
-      <div className="inline-block p-3 bg-red-50 rounded-full mb-4">
+      <div className="inline-block p-4 bg-red-50 rounded-full mb-6">
         {icon}
       </div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-bold mb-3 text-gray-800">{title}</h3>
+      <p className="text-gray-600 leading-relaxed">{description}</p>
     </motion.div>
   )
 } 
