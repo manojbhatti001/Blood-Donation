@@ -108,19 +108,19 @@ export default function Footer() {
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/10 to-red-600/10 flex items-center justify-center group-hover:from-red-500/20 group-hover:to-red-600/20 transition-all duration-300">
                   <PhoneCall className="h-5 w-5 text-red-500" />
                 </div>
-                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">+1 234 567 890</span>
+                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">+91 9992396623</span>
               </div>
               <div className="flex items-center group">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/10 to-red-600/10 flex items-center justify-center group-hover:from-red-500/20 group-hover:to-red-600/20 transition-all duration-300">
                   <Mail className="h-5 w-5 text-red-500" />
                 </div>
-                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">contact@blooddonation.com</span>
+                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">iinsafgroup@gmail.com</span>
               </div>
               <div className="flex items-center group">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/10 to-red-600/10 flex items-center justify-center group-hover:from-red-500/20 group-hover:to-red-600/20 transition-all duration-300">
                   <MapPin className="h-5 w-5 text-red-500" />
                 </div>
-                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">Developed by Iinsaf Team</span>
+                <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">419,Sunder Nagar Hisar 125001</span>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function Footer() {
         {/* Social Links & Copyright */}
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 mb-4 md:mb-0">© 2025 Blood Donation Platform. All rights reserved.</p>
+            <p className="text-gray-400 mb-4 md:mb-0">© Developed by Iinsaf Team. All rights reserved.</p>
             <div className="flex space-x-6">
               <a href="https://linkedin.com/company/blood-donation" target="_blank" rel="noopener noreferrer" 
                 className="transform hover:scale-110 transition-transform duration-300">

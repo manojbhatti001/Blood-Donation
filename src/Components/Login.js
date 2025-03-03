@@ -68,7 +68,7 @@ const Login = () => {
               }`}
             >
               <User className="w-4 h-4 inline-block mr-2" />
-              Individual
+              Donor
             </button>
             <button
               type="button"
