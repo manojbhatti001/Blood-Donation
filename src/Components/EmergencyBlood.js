@@ -1,77 +1,78 @@
-import { AlertCircle, Clock, MapPin, Phone, CheckCircle, Search, Hospital } from "lucide-react"
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { AnimatedSection, fadeIn, slideIn } from "./Animation"
-import { toast } from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { AlertCircle, Clock, MapPin, Phone, CheckCircle, Search, Hospital } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { AnimatedSection, fadeIn, slideIn } from "./Animation";
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function EmergencyBlood() {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   // Add useEffect to scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   const [formData, setFormData] = useState({
     bloodType: "",
     requestorName: "",
     phone: "",
     city: "",
+    state: "",
     hospital: "",
     urgencyLevel: "normal",
     additionalInfo: ""
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       // Validate required fields
-      const requiredFields = ['bloodType', 'requestorName', 'phone', 'city', 'hospital']
-      const missingFields = requiredFields.filter(field => !formData[field])
-      
+      const requiredFields = ['bloodType', 'requestorName', 'phone', 'city', 'state', 'hospital'];
+      const missingFields = requiredFields.filter(field => !formData[field]);
+
       if (missingFields.length > 0) {
-        throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`)
+        throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`);
       }
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
       // Store request in localStorage for demo purposes
-      const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]')
+      const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
       const newRequest = {
         id: Date.now(),
         ...formData,
         status: 'pending',
         dateCreated: new Date().toISOString()
-      }
-      requests.push(newRequest)
-      localStorage.setItem('bloodRequests', JSON.stringify(requests))
+      };
+      requests.push(newRequest);
+      localStorage.setItem('bloodRequests', JSON.stringify(requests));
 
-      toast.success("Emergency request submitted successfully!")
-      navigate('/search-requests')
+      toast.success("Emergency request submitted successfully!");
+      navigate('/search-requests');
     } catch (error) {
-      toast.error(error.message || "Failed to submit request. Please try again.")
+      toast.error(error.message || "Failed to submit request. Please try again.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <motion.section 
-        className="bg-red-600 text-white py-16"
+        className="bg-red-600 text-white py-6"
         initial="initial"
         animate="animate"
         variants={fadeIn}
@@ -97,38 +98,41 @@ export default function EmergencyBlood() {
       </motion.section>
 
       <AnimatedSection>
-        <div className="container px-4 mx-auto py-16">
-          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Blood Type Selection */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Blood Type Required <span className="text-red-500">*</span>
-                </label>
-                <select 
-                  name="bloodType"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 transition-all"
-                  value={formData.bloodType}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Blood Type</option>
-                  {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Requestor Information */}
-              <div>
+        <div className="container px-4 mx-auto py-8">
+          <div className="flex flex-col md:flex-row items-center bg-white rounded-xl shadow-xl p-4">
+            <div className="w-full md:w-1/2 mb-4 md:mb-0 flex justify-center items-center">
+              <img src="/images/Blood_donation_process.jpg" alt="Emergency Blood" className="w-full h-auto rounded-lg shadow-lg" />
+            </div>
+            <div className="w-full md:w-1/2 md:pl-4">
+              <form className="space-y-2" onSubmit={handleSubmit}>
+                {/* Blood Type Selection */}
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Blood Type Required <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    name="bloodType"
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 transition-all"
+                    value={formData.bloodType}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Blood Type</option>
+                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Requestor Information */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
                     Requestor Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="requestorName"
-                    className="w-full p-3 border rounded-lg"
+                    className="w-full p-2 border rounded-lg"
                     placeholder="Enter your name"
                     value={formData.requestorName}
                     onChange={handleChange}
@@ -136,105 +140,118 @@ export default function EmergencyBlood() {
                   />
                 </div>
                 
-                <div className="mt-4">
-                  <label className="block text-gray-700 font-medium mb-2">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
                     name="phone"
-                    className="w-full p-3 border rounded-lg"
+                    className="w-full p-2 border rounded-lg"
                     placeholder="Enter phone number"
                     value={formData.phone}
                     onChange={handleChange}
                     required
                   />
                 </div>
-              </div>
 
-              {/* Location Information */}
-              <div>
+                {/* Location Information */}
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label className="block text-gray-700 font-medium mb-1">
                     City <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="city"
-                    className="w-full p-3 border rounded-lg"
+                    className="w-full p-2 border rounded-lg"
                     placeholder="Enter city name"
                     value={formData.city}
                     onChange={handleChange}
                     required
                   />
                 </div>
+
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    State <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="state"
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="Enter state name"
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
                 
-                <div className="mt-4">
-                  <label className="block text-gray-700 font-medium mb-2">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
                     Hospital Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="hospital"
-                    className="w-full p-3 border rounded-lg"
+                    className="w-full p-2 border rounded-lg"
                     placeholder="Enter hospital name"
                     value={formData.hospital}
                     onChange={handleChange}
                     required
                   />
                 </div>
-              </div>
 
-              {/* Urgency Level */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Urgency Level
-                </label>
-                <select
-                  name="urgencyLevel"
-                  className="w-full p-3 border rounded-lg"
-                  value={formData.urgencyLevel}
-                  onChange={handleChange}
+                {/* Urgency Level */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Urgency Level
+                  </label>
+                  <select
+                    name="urgencyLevel"
+                    className="w-full p-2 border rounded-lg"
+                    value={formData.urgencyLevel}
+                    onChange={handleChange}
+                  >
+                    <option value="normal">Normal</option>
+                    <option value="urgent">Urgent</option>
+                    <option value="critical">Critical</option>
+                  </select>
+                </div>
+
+                {/* Additional Information */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Additional Information
+                  </label>
+                  <textarea
+                    name="additionalInfo"
+                    className="w-full p-2 border rounded-lg"
+                    rows="2"
+                    placeholder="Any additional details..."
+                    value={formData.additionalInfo}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <motion.button
+                  type="submit"
+                  className="w-full bg-red-600 text-white py-2 rounded-lg font-medium hover:bg-red-700 transition-all transform hover:scale-105"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="critical">Critical</option>
-                </select>
-              </div>
-
-              {/* Additional Information */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Additional Information
-                </label>
-                <textarea
-                  name="additionalInfo"
-                  className="w-full p-3 border rounded-lg"
-                  rows="3"
-                  placeholder="Any additional details..."
-                  value={formData.additionalInfo}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-all transform hover:scale-105"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Submitting Request...
-                  </span>
-                ) : "Submit Emergency Request"}
-              </motion.button>
-            </form>
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Submitting Request...
+                    </span>
+                  ) : "Submit Emergency Request"}
+                </motion.button>
+              </form>
+            </div>
           </div>
         </div>
       </AnimatedSection>
@@ -263,7 +280,7 @@ export default function EmergencyBlood() {
         </div>
       </AnimatedSection>
     </div>
-  )
+  );
 }
 
 function ProcessCard({ icon, title, description }) {
@@ -278,5 +295,5 @@ function ProcessCard({ icon, title, description }) {
       <h3 className="text-xl font-bold mb-3 text-gray-800">{title}</h3>
       <p className="text-gray-600 leading-relaxed">{description}</p>
     </motion.div>
-  )
-} 
+  );
+}

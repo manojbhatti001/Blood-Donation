@@ -29,9 +29,10 @@ const Navbar = () => {
   };
 
   const volunteerLinks = [
+    { name: "Volunteer", path: "/Volunteer" },
     { name: "NGO's", path: "/ngo-registration" },
-    { name: "Volunteer Vehicle", path: "/vehicle-registration" },
-    { name: "Hospital/Organization", path: "/hospital-registration" },
+    { name: "Volunteer Vehicle", path: "/register-vehicle" },
+    { name: "Hospital/Organization", path: "/register-hospital" },
   ];
 
   return (
@@ -86,7 +87,8 @@ const Navbar = () => {
               <div className="relative group">
                 <button 
                   className={`group px-4 py-2 rounded-md text-base font-medium transition-all duration-300 inline-flex items-center ${
-                    isActivePath('/volunteer') 
+                    isActivePath('/volunteer') || isActivePath('/ngo-registration') || 
+                    isActivePath('/vehicle-registration') || isActivePath('/hospital-registration')
                       ? 'text-red-600' 
                       : 'text-gray-700 hover:text-red-600'
                   }`}
@@ -94,7 +96,7 @@ const Navbar = () => {
                   onMouseLeave={() => setIsVolunteerDropdownOpen(false)}
                 >
                   <span className="relative">
-                    Volunteer
+                    Volunteer Services
                     <span className={`absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600`} />
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -113,7 +115,12 @@ const Navbar = () => {
                       <Link
                         key={link.path}
                         to={link.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        className={`block px-4 py-2 text-sm ${
+                          isActivePath(link.path)
+                            ? 'text-red-600 bg-red-50'
+                            : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                        } transition-colors`}
+                        onClick={() => setIsVolunteerDropdownOpen(false)}
                       >
                         {link.name}
                       </Link>
@@ -190,12 +197,13 @@ const Navbar = () => {
             <button
               onClick={() => setIsVolunteerDropdownOpen(!isVolunteerDropdownOpen)}
               className={`w-full flex justify-between items-center px-4 py-3 rounded-md text-lg font-medium ${
-                isActivePath('/volunteer') 
+                isActivePath('/volunteer') || isActivePath('/ngo-registration') || 
+                isActivePath('/vehicle-registration') || isActivePath('/hospital-registration')
                   ? 'text-red-600 bg-red-50 border-l-4 border-red-600' 
                   : 'text-gray-700 hover:text-red-600 hover:bg-red-50 hover:border-l-4 hover:border-red-600'
               }`}
             >
-              Volunteer
+              Volunteer Services
               <ChevronDown className={`h-5 w-5 transform transition-transform ${isVolunteerDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             
@@ -212,7 +220,11 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="block px-8 py-2 text-base text-gray-700 hover:text-red-600 hover:bg-red-50"
+                  className={`block px-8 py-2 text-base ${
+                    isActivePath(link.path)
+                      ? 'text-red-600 bg-red-50'
+                      : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  } transition-colors`}
                   onClick={() => {
                     setIsOpen(false);
                     setIsVolunteerDropdownOpen(false);
