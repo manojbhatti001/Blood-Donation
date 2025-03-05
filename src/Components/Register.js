@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Building, User } from 'lucide-react';
+import { Droplet, User, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Register = () => {
@@ -10,7 +10,7 @@ const Register = () => {
     if (type === 'donor') {
       navigate('/register-donor');
     } else {
-      navigate('/register-hospital');
+      navigate('/emergency-blood');
     }
   };
 
@@ -47,7 +47,7 @@ const Register = () => {
                 </div>
                 <div className="ml-4 text-left">
                   <p className="text-lg font-medium text-gray-900">Donor Registration</p>
-                  <p className="text-sm text-gray-500">Register as an individual blood donor</p>
+                  <p className="text-sm text-gray-500">Register as a blood donor and save lives</p>
                 </div>
               </div>
               <svg className="h-5 w-5 text-gray-400 group-hover:text-red-500" viewBox="0 0 20 20" fill="currentColor">
@@ -55,18 +55,18 @@ const Register = () => {
               </svg>
             </button>
 
-            {/* Hospital Registration Option */}
+            {/* Blood Request Registration Option */}
             <button
-              onClick={() => handleOptionSelect('hospital')}
+              onClick={() => handleOptionSelect('request')}
               className="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition-all group"
             >
               <div className="flex items-center">
                 <div className="bg-red-100 p-3 rounded-lg group-hover:bg-red-200">
-                  <Building className="h-6 w-6 text-red-600" />
+                  <AlertCircle className="h-6 w-6 text-red-600" />
                 </div>
                 <div className="ml-4 text-left">
-                  <p className="text-lg font-medium text-gray-900">Hospital Registration</p>
-                  <p className="text-sm text-gray-500">Register as a hospital or organization</p>
+                  <p className="text-lg font-medium text-gray-900">Blood Request</p>
+                  <p className="text-sm text-gray-500">Submit an emergency blood request</p>
                 </div>
               </div>
               <svg className="h-5 w-5 text-gray-400 group-hover:text-red-500" viewBox="0 0 20 20" fill="currentColor">
@@ -101,4 +101,4 @@ const Register = () => {
   );
 };
 
-export default Register; 
+export default Register;

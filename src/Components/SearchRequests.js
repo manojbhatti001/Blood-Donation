@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Filter, MapPin, Phone, Clock, AlertCircle } from 'lucide-react'
+import {  Phone, MapPin, Clock, AlertCircle, Hospital } from 'lucide-react'
 import { AnimatedSection } from './Animation'
 
 export default function SearchRequests() {
   const [requests, setRequests] = useState([])
   const [filteredRequests, setFilteredRequests] = useState([])
-  const [filters, setFilters] = useState({
-    bloodType: '',
-    city: '',
-    status: ''
-  })
+  const [searchPhone, setSearchPhone] = useState('')
 
   useEffect(() => {
     // Load requests from localStorage
@@ -19,87 +15,69 @@ export default function SearchRequests() {
     setFilteredRequests(savedRequests)
   }, [])
 
-  const handleFilter = () => {
-    let filtered = requests
-    if (filters.bloodType) {
-      filtered = filtered.filter(req => req.bloodType === filters.bloodType)
-    }
-    if (filters.city) {
-      filtered = filtered.filter(req => 
-        req.city.toLowerCase().includes(filters.city.toLowerCase())
+  const handleSearch = (value) => {
+    setSearchPhone(value)
+    if (value.trim() === '') {
+      setFilteredRequests(requests)
+    } else {
+      const filtered = requests.filter(req => 
+        req.phone.includes(value.trim())
       )
+      setFilteredRequests(filtered)
     }
-    if (filters.status) {
-      filtered = filtered.filter(req => req.status === filters.status)
-    }
-    setFilteredRequests(filtered)
   }
 
-  useEffect(() => {
-    handleFilter()
-  }, [filters])
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Blood Requests</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="pt-16 sm:pt-20 pb-6 sm:pb-10">
+        <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Section */}
+          <div className="text-center mb-6 sm:mb-10">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
+              Track Blood Request
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-xl mx-auto px-4">
+              Enter the phone number associated with your blood request to check its status
+            </p>
+          </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Blood Type</label>
-              <select
-                className="w-full p-2 border rounded"
-                value={filters.bloodType}
-                onChange={(e) => setFilters({...filters, bloodType: e.target.value})}
-              >
-                <option value="">All Types</option>
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2">City</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded"
-                placeholder="Enter city name"
-                value={filters.city}
-                onChange={(e) => setFilters({...filters, city: e.target.value})}
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2">Status</label>
-              <select
-                className="w-full p-2 border rounded"
-                value={filters.status}
-                onChange={(e) => setFilters({...filters, status: e.target.value})}
-              >
-                <option value="">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="fulfilled">Fulfilled</option>
-                <option value="urgent">Urgent</option>
-              </select>
+          {/* Search Section */}
+          <div className="max-w-xl mx-auto mb-6 sm:mb-10 px-4">
+            <div className="bg-white rounded-xl shadow-lg p-3 sm:p-4">
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 sm:w-5 h-4 sm:h-5" />
+                <input
+                  type="tel"
+                  className="w-full pl-10 pr-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-200 transition-all text-sm sm:text-base"
+                  placeholder="Enter phone number..."
+                  value={searchPhone}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Requests List */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRequests.map(request => (
-            <RequestCard key={request.id} request={request} />
-          ))}
+          {/* Results Section */}
+          {filteredRequests.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 px-4">
+              {filteredRequests.map(request => (
+                <RequestCard key={request.id} request={request} />
+              ))}
+            </div>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto m-4"
+            >
+              <AlertCircle className="w-8 sm:w-12 h-8 sm:h-12 text-red-500 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">No Requests Found</h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                No blood requests found for this phone number. Please check the number and try again.
+              </p>
+            </motion.div>
+          )}
         </div>
-
-        {filteredRequests.length === 0 && (
-          <div className="text-center text-gray-500 mt-8">
-            No blood requests found matching your criteria
-          </div>
-        )}
       </div>
     </div>
   )
@@ -108,38 +86,55 @@ export default function SearchRequests() {
 function RequestCard({ request }) {
   return (
     <motion.div 
-      className="bg-white rounded-lg shadow-md p-6"
-      whileHover={{ y: -5 }}
+      className="bg-white rounded-xl shadow-lg overflow-hidden"
+      whileHover={{ y: -3 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-2xl font-bold text-red-600">{request.bloodType}</span>
-        <span className={`px-3 py-1 rounded-full text-sm ${
-          request.urgencyLevel === 'critical' ? 'bg-red-100 text-red-600' :
-          request.urgencyLevel === 'urgent' ? 'bg-yellow-100 text-yellow-600' :
-          'bg-green-100 text-green-600'
-        }`}>
-          {request.urgencyLevel}
-        </span>
+      <div className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center">
+            <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-100 flex items-center justify-center">
+              <span className="text-base sm:text-lg font-bold text-red-600">{request.bloodType}</span>
+            </div>
+            <div className="ml-2 sm:ml-3">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900">{request.requestorName}</h3>
+              <p className="text-xs sm:text-sm text-gray-500">{request.phone}</p>
+            </div>
+          </div>
+          <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
+            request.urgencyLevel === 'critical' ? 'bg-red-100 text-red-700' :
+            request.urgencyLevel === 'urgent' ? 'bg-yellow-100 text-yellow-700' :
+            'bg-green-100 text-green-700'
+          }`}>
+            {request.urgencyLevel}
+          </span>
+        </div>
+
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="flex items-center text-gray-600">
+            <Hospital className="w-3.5 sm:w-4 h-3.5 sm:h-4 mr-1.5 sm:mr-2 text-gray-400" />
+            <span className="text-xs sm:text-sm truncate">{request.hospital}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4 mr-1.5 sm:mr-2 text-gray-400" />
+            <span className="text-xs sm:text-sm truncate">{request.city}, {request.state}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Clock className="w-3.5 sm:w-4 h-3.5 sm:h-4 mr-1.5 sm:mr-2 text-gray-400" />
+            <span className="text-xs sm:text-sm">{new Date(request.dateCreated).toLocaleDateString()}</span>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-gray-600">
-          <MapPin className="w-4 h-4 mr-2" />
-          {request.hospital}, {request.city}
-        </div>
-        <div className="flex items-center text-gray-600">
-          <Clock className="w-4 h-4 mr-2" />
-          {new Date(request.dateCreated).toLocaleDateString()}
-        </div>
-      </div>
-
-      <div className="border-t pt-4">
-        <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors">
+      <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 border-t">
+        <button 
+          className="w-full bg-red-600 text-white py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-red-700 transition-all transform hover:scale-102 hover:shadow-md"
+          onClick={() => window.location.href = `tel:${request.phone}`}
+        >
           Contact Requestor
         </button>
       </div>
     </motion.div>
   )
-} 
+}
