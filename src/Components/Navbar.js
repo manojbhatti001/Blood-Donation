@@ -2,6 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isVolunteerDropdownOpen, setIsVolunteerDropdownOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   // Handle scroll effect
   useEffect(() => {
@@ -24,6 +26,17 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  const handleHospitalClick = (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      navigate('/hospital-login');
+    } else {
+      navigate('/emergency-blood');
+    }
+    setIsOpen(false);
+    setIsVolunteerDropdownOpen(false);
+  };
+
   const isActivePath = (path) => {
     return location.pathname === path;
   };
@@ -32,7 +45,7 @@ const Navbar = () => {
     { name: "Volunteer", path: "/Volunteer" },
     { name: "NGO's", path: "/ngo-registration" },
     { name: "Volunteer Vehicle", path: "/register-vehicle" },
-    { name: "Hospital/Organization", path: "/register-hospital" },
+    { name: "Hospital/Organization", path: "#", onClick: handleHospitalClick },
   ];
 
   return (
@@ -68,7 +81,7 @@ const Navbar = () => {
               >
                 <span className="relative">
                   Home
-                  <span className={`absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600`} />
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600" />
                 </span>
               </Link>
               <Link 
@@ -81,7 +94,7 @@ const Navbar = () => {
               >
                 <span className="relative">
                   Emergency Blood
-                  <span className={`absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600`} />
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600" />
                 </span>
               </Link>
               <div className="relative group">
@@ -97,7 +110,7 @@ const Navbar = () => {
                 >
                   <span className="relative">
                     Volunteer Services
-                    <span className={`absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600`} />
+                    <span className="absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 transition-transform group-hover:scale-x-100 bg-red-600" />
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </button>
@@ -113,14 +126,14 @@ const Navbar = () => {
                   <div className="py-1">
                     {volunteerLinks.map((link) => (
                       <Link
-                        key={link.path}
+                        key={link.name}
                         to={link.path}
+                        onClick={link.onClick}
                         className={`block px-4 py-2 text-sm ${
                           isActivePath(link.path)
                             ? 'text-red-600 bg-red-50'
                             : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
                         } transition-colors`}
-                        onClick={() => setIsVolunteerDropdownOpen(false)}
                       >
                         {link.name}
                       </Link>
@@ -218,17 +231,14 @@ const Navbar = () => {
             >
               {volunteerLinks.map((link) => (
                 <Link
-                  key={link.path}
+                  key={link.name}
                   to={link.path}
+                  onClick={link.onClick}
                   className={`block px-8 py-2 text-base ${
                     isActivePath(link.path)
                       ? 'text-red-600 bg-red-50'
                       : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
                   } transition-colors`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setIsVolunteerDropdownOpen(false);
-                  }}
                 >
                   {link.name}
                 </Link>

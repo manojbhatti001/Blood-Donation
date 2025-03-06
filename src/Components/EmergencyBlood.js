@@ -44,7 +44,7 @@ export default function EmergencyBlood() {
 
       if (missingFields.length > 0) {
         // Fix: Add backticks for template literal
-        throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`);
+        // throw new Error(Please fill in all required fields: ${missingFields.join(', ')});
       }
 
       // Simulate API call
@@ -83,8 +83,8 @@ export default function EmergencyBlood() {
             className="flex items-center justify-center space-x-3 mb-8"
             variants={slideIn}
           >
-            <AlertCircle className="w-12 h-12 animate-pulse" />
-            <h1 className="text-4xl md:text-5xl font-bold">Emergency Blood Request</h1>
+            {/* <AlertCircle className="w-12 h-12 animate-pulse" />
+            <h1 className="text-4xl md:text-5xl font-bold">Emergency Blood Request</h1> */}
           </motion.div>
           <motion.div className="flex justify-center gap-4 mt-8">
             <button
@@ -101,8 +101,8 @@ export default function EmergencyBlood() {
       <AnimatedSection>
         <div className="container max-w-4xl px-4 mx-auto py-6">
           <div className="flex flex-col md:flex-row items-stretch bg-white rounded-xl shadow-xl overflow-hidden">
-            {/* Image Section */}
-            <div className="w-full md:w-1/2 relative min-h-[400px] md:min-h-[500px]">
+            {/* Image Section - Hidden on mobile */}
+            <div className="hidden md:block w-full md:w-1/2 relative min-h-[500px]">
               <img 
                 src="/images/Blood_donation_process.jpg" 
                 alt="Emergency Blood" 
@@ -116,7 +116,11 @@ export default function EmergencyBlood() {
             </div>
 
             {/* Form Section */}
-            <div className="w-full md:w-1/2 p-5">
+            <div className="w-full md:w-1/2 p-5 sm:p-8">
+              <div className="md:hidden mb-6 text-center">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Emergency Blood Request</h2>
+                <p className="text-gray-600">Fill out the form to submit your emergency blood request.</p>
+              </div>
               <form className="space-y-3" onSubmit={handleSubmit}>
                 {/* Blood Type Selection */}
                 <div>

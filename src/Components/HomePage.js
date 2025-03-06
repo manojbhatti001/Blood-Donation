@@ -1,9 +1,74 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { Heart, Users, Calendar, AlertCircle, Info, BookOpen, Activity, X } from "lucide-react"
 import { motion } from "framer-motion"
 
+function useCountUp(end, duration = 4000) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+  const animationRef = useRef(null);
+  const startTimeRef = useRef(null);
 
+  // Improved easing function for smoother animation
+  const easeOutExpo = (t) => {
+    return t === 1 ? 1 : 1 - Math.pow(2, -6 * t);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          setCount(0);
+          startTimeRef.current = null;
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+          }
+        } else {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const animate = (currentTime) => {
+      if (!startTimeRef.current) {
+        startTimeRef.current = currentTime;
+      }
+      
+      const elapsed = currentTime - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      if (progress < 1) {
+        const easedProgress = easeOutExpo(progress);
+        setCount(Math.floor(end * easedProgress));
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+  }, [end, duration, isVisible]);
+
+  return [count, ref];
+}
 
 export default function HomePage() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
@@ -544,15 +609,15 @@ function InfoCard({ title, description, image, icon, link, stats }) {
   return (
     <>
       <div onClick={() => setIsModalOpen(true)}>
-        <motion.div 
+      <motion.div 
           className="rounded-2xl overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition-all duration-300"
-          whileHover={{ y: -5 }}
-        >
+        whileHover={{ y: -5 }}
+      >
           {/* Image Section */}
-          <div className="aspect-video relative">
-            <img 
-              src={image} 
-              alt={title} 
+        <div className="aspect-video relative">
+          <img 
+            src={image} 
+            alt={title} 
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-90" />
@@ -594,7 +659,7 @@ function InfoCard({ title, description, image, icon, link, stats }) {
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </span>
-            </div>
+        </div>
           </div>
         </motion.div>
       </div>
@@ -724,20 +789,74 @@ function InfoCard({ title, description, image, icon, link, stats }) {
   );
 }
 
-// Simple Components
+// Fix for the StatCard component
 function StatCard({ number, label, icon, className }) {
+  const [count, ref] = useCountUp(parseInt(number.replace(/[^0-9]/g, '')));
+  // Fix the template literal syntax
+  const displayNumber = number === "24/7" ? number : (number.includes('+') ? `${count}+` : count);
+
   return (
     <motion.div 
-      whileHover={{ scale: 1.03, y: -5 }}
-      className={`text-center p-8 rounded-2xl shadow-lg backdrop-blur-sm ${className} text-white cursor-pointer`}
+      ref={number !== "24/7" ? ref : null}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, margin: "-100px" }}
+      whileHover={{ 
+        scale: 1.05,
+        y: -10,
+        transition: { duration: 0.4 }
+      }}
+      // Fix the template literal syntax for className
+      className={`text-center p-8 rounded-2xl shadow-lg backdrop-blur-sm ${className} text-white cursor-pointer relative overflow-hidden group`}
     >
-      <div className="text-white/90 mb-4 flex justify-center transform group-hover:scale-110 transition-transform duration-300">{icon}</div>
-      <div className="text-4xl font-bold mb-2">
-        {number}
-      </div>
-      <div className="text-white/90 font-medium tracking-wide">{label}</div>
+      {/* Hover effect background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+      
+      {/* Icon with animation */}
+      <motion.div 
+        className="text-white/90 mb-4 flex justify-center"
+        initial={{ scale: 0.5, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: false, margin: "-100px" }}
+        whileHover={{ 
+          scale: 1.2,
+          rotate: 360,
+          transition: { duration: 0.7 }
+        }}
+      >
+        {icon}
+      </motion.div>
+
+      {/* Number with improved animation */}
+      <motion.div 
+        className="text-4xl font-bold mb-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <span className="inline-block">
+          {displayNumber}
+        </span>
+      </motion.div>
+
+      {/* Label with hover effect */}
+      <motion.div 
+        className="text-white/90 font-medium tracking-wide"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, margin: "-100px" }}
+        whileHover={{ 
+          scale: 1.1,
+          transition: { duration: 0.3 }
+        }}
+      >
+        {label}
+      </motion.div>
+
+      {/* Hover border effect */}
+      <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/30 rounded-2xl transition-all duration-400" />
     </motion.div>
-  )
+  );
 }
 
 // Data

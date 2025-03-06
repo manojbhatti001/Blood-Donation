@@ -82,9 +82,12 @@ export default function DonorRegistration() {
 
             {/* Right side - Compressed Form */}
             <div className="md:col-span-3 p-4">
-              <div className="text-center mb-3">
-                <h2 className="text-xl font-bold text-gray-900">Become a Donor</h2>
-              </div>
+            <div className="text-center mb-3">
+  <h2 className="text-xl font-bold text-gray-900">
+    Become a <span style={{color: 'red'}}>Donor</span>
+  </h2> {/* Closed the h2 tag properly */}
+</div>
+
 
               <form onSubmit={handleSubmit} className="space-y-2">
                 {/* Personal Details */}

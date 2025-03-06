@@ -5,6 +5,7 @@ import HomePage from "./Components/HomePage";
 import EmergencyBlood from "./Components/EmergencyBlood";
 import Volunteer from "./Components/Volunteer";
 import Login from "./Components/Login";
+import HospitalLogin from "./Components/HospitalLogin";
 import DonorRegistration from "./Components/DonorRegistration";
 import Footer from "./Components/Footer";
 import { Toaster } from 'react-hot-toast'
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/emergency-blood" element={<EmergencyBlood />} />
               <Route path="/volunteer" element={<Volunteer />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/hospital-login" element={<HospitalLogin />} />
               <Route path="/register" element={<Register />} />
               <Route path="/register-donor" element={<DonorRegistration />} />
               <Route path="/register-hospital" element={<HospitalRegistration />} />
