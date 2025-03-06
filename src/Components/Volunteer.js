@@ -62,7 +62,7 @@ export default function Volunteer() {
       >
         <div className="absolute inset-0">
           <img
-            src="/images/volunteer-bg.jpg"
+            src="/images/volunter_bg.jpg"
             alt="Volunteers"
             className="w-full h-full object-cover opacity-20"
           />
@@ -134,7 +134,7 @@ export default function Volunteer() {
             {/* Image Section */}
             <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-[600px]">
               <img 
-                src="/images/volunteer-form-bg.jpg" 
+                src="/images/young_donoer.jpg" 
                 alt="Volunteer" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

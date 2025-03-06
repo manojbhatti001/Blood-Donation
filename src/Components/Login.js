@@ -1,12 +1,13 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Mail, Lock, User, ArrowRight, Phone, Building } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Link, useNavigate, useLocation } from "react-router-dom"
+import { Mail, Lock, User, ArrowRight, Phone, AlertCircle } from "lucide-react"
 import { motion } from "framer-motion"
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 
 const Login = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth()
   const [userType, setUserType] = useState('individual')
   const [formData, setFormData] = useState({
@@ -18,6 +19,15 @@ const Login = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    // Check for type parameter in URL
+    const params = new URLSearchParams(location.search)
+    const type = params.get('type')
+    if (type === 'emergency') {
+      setUserType('emergency')
+    }
+  }, [location])
 
   const handleChange = (e) => {
     setFormData({
@@ -33,7 +43,11 @@ const Login = () => {
 
     try {
       await login(formData)
-      navigate('/dashboard')
+      if (userType === 'emergency') {
+        navigate('/emergency-blood')
+      } else {
+        navigate('/dashboard')
+      }
     } catch (error) {
       setError('Invalid credentials. Please try again.')
     } finally {
@@ -43,7 +57,7 @@ const Login = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+      className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 pt-32"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -72,20 +86,20 @@ const Login = () => {
             </button>
             <button
               type="button"
-              onClick={() => setUserType('organization')}
+              onClick={() => setUserType('emergency')}
               className={`relative flex-1 py-2 px-4 text-sm font-medium rounded-r-md focus:outline-none ${
-                userType === 'organization'
+                userType === 'emergency'
                   ? 'bg-red-600 text-white'
                   : 'bg-white text-gray-700 hover:text-red-600'
               }`}
             >
-              <Building className="w-4 h-4 inline-block mr-2" />
-              Hospital/Organization
+              <AlertCircle className="w-4 h-4 inline-block mr-2" />
+              Emergency Request
             </button>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {userType === 'organization' && (
+            {userType === 'emergency' && (
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email Address
@@ -194,10 +208,10 @@ const Login = () => {
                 </Link>
               ) : (
                 <Link
-                  to="/register-hospital"
+                  to="/emergency-blood"
                   className="w-full flex justify-center py-2 px-4 border border-red-600 rounded-md shadow-sm text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
-                  Register Hospital/Organization
+                  Emergency Blood Request
                 </Link>
               )}
             </div>
@@ -208,4 +222,4 @@ const Login = () => {
   )
 }
 
-export default Login 
+export default Login
