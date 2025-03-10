@@ -56,11 +56,11 @@ export default function DonorRegistration() {
           <div className="grid md:grid-cols-5">
             {/* Left side - Image with Overlay */}
             <div className="relative hidden md:block md:col-span-2">
-              {/* <img 
+              <img 
                 src="/images/Blood_donation_process.jpg" 
                 alt="Blood Donation" 
                 className="h-full w-full object-cover"
-              /> */}
+              />
               <div className="absolute inset-0  flex flex-col justify-end p-4 text-white">
                 <h3 className="text-lg font-bold">Save Lives Today</h3>
                 <div className="mt-2 space-y-1 text-xs">
