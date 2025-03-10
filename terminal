@@ -2,3 +2,6 @@ git add .
 git commit -m "Initial commit: Blood Donation Project"
 git branch -M main
 git push -u origin main
+
+git rm --cached public/images/CursorUserSetup-x64-0.46.9.exe
+git commit -m "Remove large exe file"

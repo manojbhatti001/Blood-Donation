@@ -19,3 +19,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Large files
+public/images/CursorUserSetup-x64-0.46.9.exe
