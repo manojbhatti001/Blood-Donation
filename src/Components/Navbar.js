@@ -11,6 +11,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isVolunteerDropdownOpen, setIsVolunteerDropdownOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -47,6 +48,18 @@ const Navbar = () => {
     { name: "Volunteer Vehicle", path: "/register-vehicle" },
     { name: "Hospital/Organization", path: "#", onClick: handleHospitalClick },
   ];
+
+  const handleMobileSubmenuClick = () => {
+    setMobileSubmenuOpen(!mobileSubmenuOpen);
+  };
+
+  const handleMobileLinkClick = (link) => {
+    if (link.onClick) {
+      link.onClick();
+    }
+    setIsOpen(false);
+    setMobileSubmenuOpen(false);
+  };
 
   return (
     <nav 
@@ -190,7 +203,7 @@ const Navbar = () => {
         <div className="px-4 pt-2 pb-3 space-y-2 bg-white shadow-lg">
           <Link
             to="/"
-            className={`block px-4 py-2.5 rounded-md text-base sm:text-lg font-medium ${
+            className={`block px-4 py-2.5 rounded-md text-base font-medium ${
               isActivePath('/') 
                 ? 'text-red-600 bg-red-50 border-l-4 border-red-600' 
                 : 'text-gray-700 hover:text-red-600 hover:bg-red-50 hover:border-l-4 hover:border-red-600'
@@ -201,7 +214,7 @@ const Navbar = () => {
           </Link>
           <Link
             to="/emergency-blood"
-            className={`block px-4 py-2.5 rounded-md text-base sm:text-lg font-medium ${
+            className={`block px-4 py-2.5 rounded-md text-base font-medium ${
               isActivePath('/emergency-blood') 
                 ? 'text-red-600 bg-red-50 border-l-4 border-red-600' 
                 : 'text-gray-700 hover:text-red-600 hover:bg-red-50 hover:border-l-4 hover:border-red-600'
@@ -210,39 +223,45 @@ const Navbar = () => {
           >
             Emergency Blood
           </Link>
-          <div className="space-y-1">
+
+          {/* Mobile Volunteer Services Dropdown */}
+          <div className="relative">
             <button
-              onClick={() => setIsVolunteerDropdownOpen(!isVolunteerDropdownOpen)}
-              className={`w-full flex justify-between items-center px-4 py-3 rounded-md text-lg font-medium ${
+              onClick={handleMobileSubmenuClick}
+              className={`w-full flex justify-between items-center px-4 py-2.5 rounded-md text-base font-medium ${
                 isActivePath('/volunteer') || isActivePath('/ngo-registration') || 
-                isActivePath('/vehicle-registration') || isActivePath('/hospital-registration')
+                isActivePath('/register-vehicle') || isActivePath('/hospital-login')
                   ? 'text-red-600 bg-red-50 border-l-4 border-red-600' 
                   : 'text-gray-700 hover:text-red-600 hover:bg-red-50 hover:border-l-4 hover:border-red-600'
               }`}
             >
-              Volunteer Services
-              <ChevronDown className={`h-5 w-5 transform transition-transform ${isVolunteerDropdownOpen ? 'rotate-180' : ''}`} />
+              <span>Volunteer Services</span>
+              <ChevronDown 
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  mobileSubmenuOpen ? 'rotate-180' : ''
+                }`}
+              />
             </button>
-            
+
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ 
-                height: isVolunteerDropdownOpen ? 'auto' : 0,
-                opacity: isVolunteerDropdownOpen ? 1 : 0
+              initial={false}
+              animate={{
+                height: mobileSubmenuOpen ? 'auto' : 0,
+                opacity: mobileSubmenuOpen ? 1 : 0
               }}
               transition={{ duration: 0.2 }}
-              className="overflow-hidden"
+              className="overflow-hidden bg-gray-50"
             >
               {volunteerLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  onClick={link.onClick}
-                  className={`block px-8 py-2 text-base ${
+                  onClick={() => handleMobileLinkClick(link)}
+                  className={`block px-8 py-2.5 text-sm font-medium border-l-4 ${
                     isActivePath(link.path)
-                      ? 'text-red-600 bg-red-50'
-                      : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-                  } transition-colors`}
+                      ? 'text-red-600 bg-red-50 border-red-600' 
+                      : 'text-gray-600 border-transparent hover:text-red-600 hover:bg-red-50 hover:border-red-600'
+                  } transition-all duration-200`}
                 >
                   {link.name}
                 </Link>
@@ -254,14 +273,14 @@ const Navbar = () => {
           <div className="space-y-2 pt-2">
             <Link
               to="/login"
-              className="block w-full px-4 py-2.5 rounded-md text-base sm:text-lg font-medium text-red-600 border-2 border-red-600 hover:bg-red-50 text-center"
+              className="block w-full px-4 py-2.5 rounded-md text-base font-medium text-red-600 border-2 border-red-600 hover:bg-red-50 text-center"
               onClick={() => setIsOpen(false)}
             >
               Login
             </Link>
             <button
               onClick={handleRegisterClick}
-              className="w-full px-4 py-2.5 rounded-md text-base sm:text-lg font-medium bg-red-600 text-white hover:bg-red-700 border-2 border-transparent hover:border-red-700"
+              className="w-full px-4 py-2.5 rounded-md text-base font-medium bg-red-600 text-white hover:bg-red-700 border-2 border-transparent hover:border-red-700"
             >
               Register
             </button>

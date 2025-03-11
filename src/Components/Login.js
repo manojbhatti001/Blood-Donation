@@ -94,26 +94,26 @@ const Login = () => {
               }`}
             >
               <AlertCircle className="w-4 h-4 inline-block mr-2" />
-              Emergency Request
+              Blood Request
             </button>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {userType === 'emergency' && (
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email Address
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  Phone Number
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
+                    <Phone className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
+                    id="phone"
+                    name="phone"
+                    type="tel"
                     required
-                    value={formData.email}
+                    value={formData.phone}
                     onChange={handleChange}
                     className="pl-10 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500"
                   />
@@ -211,7 +211,7 @@ const Login = () => {
                   to="/emergency-blood"
                   className="w-full flex justify-center py-2 px-4 border border-red-600 rounded-md shadow-sm text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
-                  Emergency Blood Request
+                   Blood Request
                 </Link>
               )}
             </div>
