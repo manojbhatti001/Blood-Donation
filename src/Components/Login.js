@@ -208,7 +208,7 @@ const Login = () => {
                 </Link>
               ) : (
                 <Link
-                  to="/emergency-blood"
+                  to="/Blood-registration"
                   className="w-full flex justify-center py-2 px-4 border border-red-600 rounded-md shadow-sm text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                    Blood Request

@@ -13,6 +13,7 @@ import SearchRequests from "./Components/SearchRequests"
 import VehicleRegistration from "./Components/VehicleRegistration"
 import Register from './Components/Register';
 import HospitalRegistration from './Components/HospitalRegistration';
+import BloodRegistration from './Components/BloodRegistration';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
               <Route path="/register-hospital" element={<HospitalRegistration />} />
               <Route path="/search-requests" element={<SearchRequests />} />
               <Route path="/register-vehicle" element={<VehicleRegistration />} />
+              <Route path="/Blood-registration" element={<BloodRegistration />} />
             </Routes>
           </main>
           <Footer />

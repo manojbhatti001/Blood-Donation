@@ -10,7 +10,7 @@ const Register = () => {
     if (type === 'donor') {
       navigate('/register-donor');
     } else {
-      navigate('/emergency-blood');
+      navigate('/Blood-registration');
     }
   };
 
