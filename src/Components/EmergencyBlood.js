@@ -1,18 +1,75 @@
-import { AlertCircle, Clock, MapPin, Phone, CheckCircle, Search, Hospital } from "lucide-react";
+import { AlertCircle, Clock, MapPin, Phone, CheckCircle, Search, Hospital, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AnimatedSection, fadeIn, slideIn } from "./Animation";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+const availableBloodRequests = [
+  {
+    requestId: "REQ-2024-001",
+    bloodType: "A+",
+    requestorName: "John Smith",
+    hospital: "Apollo Hospital",
+    city: "Mumbai",
+    state: "Maharashtra",
+    status: "Pending",
+    urgencyLevel: "critical",
+    dateCreated: "2024-03-20",
+    phone: "+91 98765 43210"
+  },
+  {
+    requestId: "REQ-2024-002",
+    bloodType: "O-",
+    requestorName: "Priya Patel",
+    hospital: "Fortis Hospital",
+    city: "Delhi",
+    state: "Delhi",
+    status: "Pending",
+    urgencyLevel: "urgent",
+    dateCreated: "2024-03-21",
+    phone: "+91 98765 43211"
+  },
+  {
+    requestId: "REQ-2024-003",
+    bloodType: "B+",
+    requestorName: "Rahul Kumar",
+    hospital: "Lilavati Hospital",
+    city: "Bangalore",
+    state: "Karnataka",
+    status: "Completed",
+    urgencyLevel: "normal",
+    dateCreated: "2024-03-19",
+    phone: "+91 98765 43212"
+  },
+  {
+    requestId: "REQ-2024-004",
+    bloodType: "AB+",
+    requestorName: "Sarah Wilson",
+    hospital: "Max Hospital",
+    city: "Pune",
+    state: "Maharashtra",
+    status: "Pending",
+    urgencyLevel: "urgent",
+    dateCreated: "2024-03-22",
+    phone: "+91 98765 43213"
+  },
+  {
+    requestId: "REQ-2024-005",
+    bloodType: "O+",
+    requestorName: "Amit Shah",
+    hospital: "AIIMS",
+    city: "Chennai",
+    state: "Tamil Nadu",
+    status: "Pending",
+    urgencyLevel: "critical",
+    dateCreated: "2024-03-22",
+    phone: "+91 98765 43214"
+  }
+];
+
 export default function EmergencyBlood() {
   const navigate = useNavigate();
-
-  // Add useEffect to scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [formData, setFormData] = useState({
     bloodType: "",
     requestorName: "",
@@ -24,6 +81,29 @@ export default function EmergencyBlood() {
     additionalInfo: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Add this new function to handle accepting requests
+  const handleAcceptRequest = async (request) => {
+    try {
+      // Update the request status in localStorage
+      const savedRequests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
+      const updatedRequests = savedRequests.map(req => 
+        req.requestId === request.requestId 
+          ? { ...req, status: 'Accepted' }
+          : req
+      );
+      localStorage.setItem('bloodRequests', JSON.stringify(updatedRequests));
+
+      // Show success message
+      toast.success(`Successfully accepted request for ${request.bloodType} blood`);
+
+      // Optionally navigate to accepted requests page
+      navigate('/dashboard/accepted');
+    } catch (error) {
+      toast.error('Failed to accept request. Please try again.');
+      console.error('Error accepting request:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,6 +177,75 @@ export default function EmergencyBlood() {
           </motion.div>
         </div>
       </motion.section>
+
+      {/* Available Blood Requests Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Blood Requests</h2>
+          <div className="grid gap-4">
+            {availableBloodRequests.map((request) => (
+              <motion.div
+                key={request.requestId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white border rounded-lg shadow-sm p-4"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center">
+                      <span className="text-lg font-bold text-red-600">{request.bloodType}</span>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{request.requestId}</h3>
+                      <p className="text-sm text-gray-600">{request.requestorName}</p>
+                    </div>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    request.status === 'Completed' 
+                      ? 'bg-green-100 text-green-700'
+                      : request.urgencyLevel === 'critical'
+                      ? 'bg-red-100 text-red-700'
+                      : request.urgencyLevel === 'urgent'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {request.status}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  <div className="flex items-center text-gray-600">
+                    <Hospital className="w-4 h-4 mr-2 text-gray-400" />
+                    <span>{request.hospital}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="w-4 h-4 mr-2 text-gray-400" />
+                    <span>{`${request.city}, ${request.state}`}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <Phone className="w-4 h-4 mr-2 text-gray-400" />
+                    <span>{request.phone}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <Clock className="w-4 h-4 mr-2 text-gray-400" />
+                    <span>{request.dateCreated}</span>
+                  </div>
+                </div>
+
+                {request.status === 'Pending' && (
+                  <button 
+                    className="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center justify-center space-x-2"
+                    onClick={() => handleAcceptRequest(request)}
+                  >
+                    <span>Accept Request</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <AnimatedSection>
         <div className="container max-w-4xl px-4 mx-auto py-6">

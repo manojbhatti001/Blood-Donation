@@ -8,38 +8,39 @@ import Login from "./Components/Login";
 import HospitalLogin from "./Components/HospitalLogin";
 import DonorRegistration from "./Components/DonorRegistration";
 import Footer from "./Components/Footer";
-import { Toaster } from 'react-hot-toast'
-import SearchRequests from "./Components/SearchRequests"
-import VehicleRegistration from "./Components/VehicleRegistration"
+import { Toaster } from 'react-hot-toast';
+import SearchRequests from "./Components/SearchRequests";
+import VehicleRegistration from "./Components/VehicleRegistration";
 import Register from './Components/Register';
 import HospitalRegistration from './Components/HospitalRegistration';
 import BloodRegistration from './Components/BloodRegistration';
+import DonorDashboard from "./Components/DonorDashboard";
+import RequesterDashboard from "./Components/RequesterDashboard";
+import DashboardLayout from './Components/DashboardLayout';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/emergency-blood" element={<EmergencyBlood />} />
-              <Route path="/volunteer" element={<Volunteer />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/hospital-login" element={<HospitalLogin />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/register-donor" element={<DonorRegistration />} />
-              <Route path="/register-hospital" element={<HospitalRegistration />} />
-              <Route path="/search-requests" element={<SearchRequests />} />
-              <Route path="/register-vehicle" element={<VehicleRegistration />} />
-              <Route path="/Blood-registration" element={<BloodRegistration />} />
-            </Routes>
-          </main>
-          <Footer />
-          <Toaster position="top-right" />
-        </div>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<><Navbar /><HomePage /><Footer /></>} />
+          <Route path="/emergency-blood" element={<><Navbar /><EmergencyBlood /><Footer /></>} />
+          <Route path="/volunteer" element={<><Navbar /><Volunteer /><Footer /></>} />
+          <Route path="/login" element={<><Navbar /><Login /><Footer /></>} />
+          <Route path="/hospital-login" element={<><Navbar /><HospitalLogin /><Footer /></>} />
+          <Route path="/register" element={<><Navbar /><Register /><Footer /></>} />
+          <Route path="/register-donor" element={<><Navbar /><DonorRegistration /><Footer /></>} />
+          <Route path="/register-hospital" element={<><Navbar /><HospitalRegistration /><Footer /></>} />
+          <Route path="/search-requests" element={<><Navbar /><SearchRequests /><Footer /></>} />
+          <Route path="/register-vehicle" element={<><Navbar /><VehicleRegistration /><Footer /></>} />
+          <Route path="/Blood-registration" element={<><Navbar /><BloodRegistration /><Footer /></>} />
+
+          {/* Dashboard routes */}
+          <Route path="/dashboard/*" element={<DashboardLayout><DonorDashboard /></DashboardLayout>} />
+        </Routes>
+        <Toaster />
+      </AuthProvider>
+    </Router>
   );
 }

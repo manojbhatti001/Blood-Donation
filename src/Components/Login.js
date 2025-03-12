@@ -43,10 +43,11 @@ const Login = () => {
 
     try {
       await login(formData)
-      if (userType === 'emergency') {
-        navigate('/emergency-blood')
+      // Redirect based on user type
+      if (userType === 'individual') {
+        navigate('/donor-dashboard')
       } else {
-        navigate('/dashboard')
+        navigate('/requester-dashboard')
       }
     } catch (error) {
       setError('Invalid credentials. Please try again.')

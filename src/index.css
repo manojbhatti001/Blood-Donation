@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Update the background-image path to use relative path */
+/* Comment out or remove this line */
+/* background-image: url('/images/pattern.svg'); */
+/* background-image: url('./images/pattern.svg'); */
