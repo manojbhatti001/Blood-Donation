@@ -13,34 +13,15 @@ const DonorDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  
+  // Initialize all state variables first
   const [isEditing, setIsEditing] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [showCameraModal, setShowCameraModal] = useState(false);
   const [otp, setOtp] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
-
-  // Dummy data for Available Blood Requests
+  
+  // Dummy data states
   const [availableRequests, setAvailableRequests] = useState([
     {
       requestId: 'REQ001',
@@ -77,7 +58,6 @@ const DonorDashboard = () => {
     }
   ]);
 
-  // Dummy data for Accepted Requests
   const [acceptedRequests, setAcceptedRequests] = useState([
     {
       requestId: 'ACC001',
@@ -103,7 +83,6 @@ const DonorDashboard = () => {
     }
   ]);
 
-  // Dummy data for Donation History
   const [donationHistory, setDonationHistory] = useState([
     {
       donationId: 'DON001',
@@ -134,7 +113,6 @@ const DonorDashboard = () => {
     }
   ]);
 
-  // Dummy data for Profile
   const [profileData, setProfileData] = useState({
     fullName: 'Alex Johnson',
     bloodGroup: 'O+',
@@ -152,6 +130,37 @@ const DonorDashboard = () => {
     medicalConditions: 'None'
   });
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
+  // Debug useEffect
+  useEffect(() => {
+    console.log('Available Requests:', availableRequests);
+    console.log('Accepted Requests:', acceptedRequests);
+    console.log('Donation History:', donationHistory);
+    console.log('Profile Data:', profileData);
+    console.log('Selected Request:', selectedRequest);
+  }, [availableRequests, acceptedRequests, donationHistory, profileData, selectedRequest]);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -168,22 +177,45 @@ const DonorDashboard = () => {
 
   // Render the appropriate content based on the current route
   const renderContent = () => {
-    const currentSection = getCurrentSection();
+    return (
+      <div className="space-y-6">
+        {/* Simple but attractive dashboard header */}
+        <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Heart className="h-8 w-8 text-white animate-pulse" />
+              <div>
+                <h1 className="text-2xl font-bold text-white">Donor Dashboard</h1>
+                <p className="text-red-100 text-sm">Making a difference, one donation at a time</p>
+              </div>
+            </div>
+            <div className="hidden sm:flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg">
+              <Droplet className="h-5 w-5 text-red-200" />
+              <span className="text-white font-medium">{profileData.bloodGroup}</span>
+            </div>
+          </div>
+        </div>
 
-    switch (currentSection) {
-      case 'overview':
-        return renderOverview();
-      case 'available':
-        return renderAvailableRequests();
-      case 'accepted':
-        return renderAcceptedRequests();
-      case 'history':
-        return renderDonationHistory();
-      case 'profile':
-        return renderProfile();
-      default:
-        return renderOverview();
-    }
+        {/* Rest of the dashboard content */}
+        {(() => {
+          const currentSection = getCurrentSection();
+          switch (currentSection) {
+            case 'overview':
+              return renderOverview();
+            case 'available':
+              return renderAvailableRequests();
+            case 'accepted':
+              return renderAcceptedRequests();
+            case 'history':
+              return renderDonationHistory();
+            case 'profile':
+              return renderProfile();
+            default:
+              return renderOverview();
+          }
+        })()}
+      </div>
+    );
   };
 
   const handleAcceptRequest = (request) => {

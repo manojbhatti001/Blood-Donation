@@ -124,8 +124,8 @@ export default function VehicleRegistration() {
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-gray-100 to-white py-24 mt-16"> {/* Updated padding and margin */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8"> {/* Added responsive padding */}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-gray-100 to-white pt-20 pb-12"> {/* Changed py-24 mt-16 to pt-20 pb-12 */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
