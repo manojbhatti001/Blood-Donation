@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Update the background-image path to use relative path */
-/* Comment out or remove this line */
-/* background-image: url('/images/pattern.svg'); */
-/* background-image: url('./images/pattern.svg'); */
+/* Remove or update any problematic background-image references */
+/* If you need a pattern background, use a CSS pattern instead */
+.bg-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}

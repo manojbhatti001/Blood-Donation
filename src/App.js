@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from "./Components/Navbar";
 import HomePage from "./Components/HomePage";
@@ -38,6 +39,11 @@ export default function App() {
 
           {/* Dashboard routes */}
           <Route path="/dashboard/*" element={<DashboardLayout><DonorDashboard /></DashboardLayout>} />
+          <Route path="/requester-dashboard/*" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
+          <Route path="/requester-dashboard/create" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
+          <Route path="/requester-dashboard/active" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
+          <Route path="/requester-dashboard/history" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
+          <Route path="/requester-dashboard/profile" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
         </Routes>
         <Toaster />
       </AuthProvider>

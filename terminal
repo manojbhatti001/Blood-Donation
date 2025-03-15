@@ -1,7 +1,5 @@
-git add .
-git commit -m "Initial commit: Blood Donation Project"
-git branch -M main
-git push -u origin main
+# To revert the last 2 commits while keeping the changes in your working directory
+git reset HEAD~2
 
-git rm --cached public/images/CursorUserSetup-x64-0.46.9.exe
-git commit -m "Remove large exe file"
+# OR to revert the last 2 commits and remove the changes
+git reset --hard HEAD~2
