@@ -875,54 +875,148 @@ const RequesterDashboard = () => {
 
   // Add this new overview render function
   const renderOverview = () => (
-    <motion.div
+    <motion.div 
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-6"
+      className="space-y-8"
     >
-      {/* Quick Actions Cards */}
+      {/* Welcome Section */}
+      <motion.div 
+        variants={itemVariants}
+        className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-8 text-white shadow-xl"
+      >
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-3 bg-white/20 rounded-xl">
+            <Hospital className="w-8 h-8" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Welcome, {profile.hospitalName}</h2>
+            <p className="text-red-100">Your trusted blood request management platform</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white/10 rounded-xl p-4">
+            <p className="text-red-100 text-sm">Registration</p>
+            <p className="text-xl font-semibold">{profile.registrationNumber}</p>
+          </div>
+          <div className="bg-white/10 rounded-xl p-4">
+            <p className="text-red-100 text-sm">Type</p>
+            <p className="text-xl font-semibold">{profile.type}</p>
+          </div>
+          <div className="bg-white/10 rounded-xl p-4">
+            <p className="text-red-100 text-sm">Operating Hours</p>
+            <p className="text-xl font-semibold">{profile.operatingHours}</p>
+          </div>
+          <div className="bg-white/10 rounded-xl p-4">
+            <p className="text-red-100 text-sm">Emergency Contact</p>
+            <p className="text-xl font-semibold">{profile.emergencyContact}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Stats Overview with improved visuals */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-red-100 rounded-xl">
+              <Activity className="w-6 h-6 text-red-600" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-gray-900">{dashboardStats.totalRequests}</h3>
+              <p className="text-sm text-gray-500">Total Requests</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-100 rounded-xl">
+              <Clock className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-gray-900">{dashboardStats.activeRequests}</h3>
+              <p className="text-sm text-gray-500">Active Requests</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-green-100 rounded-xl">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-gray-900">{dashboardStats.completedRequests}</h3>
+              <p className="text-sm text-gray-500">Completed</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-purple-100 rounded-xl">
+              <Users className="w-6 h-6 text-purple-600" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-gray-900">{dashboardStats.totalDonors}</h3>
+              <p className="text-sm text-gray-500">Total Donors</p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Quick Actions with enhanced hover effects */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <motion.div
           variants={itemVariants}
-          className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer group"
-          whileHover={{ y: -5 }}
+          className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group transform hover:-translate-y-2"
         >
           <div className="flex items-start justify-between">
             <div className="p-3 bg-white/20 rounded-xl">
               <Plus className="w-6 h-6" />
             </div>
-            <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">Quick Action</span>
+            <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">New Request</span>
           </div>
           <h3 className="text-xl font-bold mt-4">Create Request</h3>
-          <p className="text-white/80 text-sm mt-1">Create a new blood request instantly</p>
+          <p className="text-white/80 text-sm mt-1">Create a new blood request</p>
           <div className="flex items-center mt-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            Create Now <ArrowRight className="w-4 h-4 ml-2" />
+            Create Now <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </div>
         </motion.div>
 
         <motion.div
           variants={itemVariants}
-          className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer group"
-          whileHover={{ y: -5 }}
+          className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group transform hover:-translate-y-2"
         >
           <div className="flex items-start justify-between">
             <div className="p-3 bg-white/20 rounded-xl">
-              <Users className="w-6 h-6" />
+              <Bell className="w-6 h-6" />
             </div>
-            <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">Donors</span>
+            <span className="text-xs font-medium bg-white/20 px-3 py-1 rounded-full">Active</span>
           </div>
-          <h3 className="text-xl font-bold mt-4">Find Donors</h3>
-          <p className="text-white/80 text-sm mt-1">Search and connect with donors</p>
+          <h3 className="text-xl font-bold mt-4">Track Requests</h3>
+          <p className="text-white/80 text-sm mt-1">Monitor active requests</p>
           <div className="flex items-center mt-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            Search Now <ArrowRight className="w-4 h-4 ml-2" />
+            View Active <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </div>
         </motion.div>
 
         <motion.div
           variants={itemVariants}
-          className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer group"
-          whileHover={{ y: -5 }}
+          className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group transform hover:-translate-y-2"
         >
           <div className="flex items-start justify-between">
             <div className="p-3 bg-white/20 rounded-xl">
@@ -933,25 +1027,28 @@ const RequesterDashboard = () => {
           <h3 className="text-xl font-bold mt-4">View Reports</h3>
           <p className="text-white/80 text-sm mt-1">Track and analyze your requests</p>
           <div className="flex items-center mt-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            View Stats <ArrowRight className="w-4 h-4 ml-2" />
+            View Stats <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </div>
         </motion.div>
       </div>
 
-      {/* Recent Requests */}
-      <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm p-6">
+      {/* Recent Requests with enhanced styling */}
+      <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Recent Requests</h2>
-          <button className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">Recent Requests</h2>
+            <p className="text-sm text-gray-500">Latest blood donation requests</p>
+          </div>
+          <button className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 hover:gap-2 transition-all">
             View All <ArrowRight className="w-4 h-4" />
           </button>
         </div>
         
         <div className="space-y-4">
           {activeRequests.slice(0, 3).map((request) => (
-            <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-300 group">
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform ${
                   request.urgencyLevel === 'Critical' ? 'bg-red-100 text-red-600' :
                   request.urgencyLevel === 'High' ? 'bg-orange-100 text-orange-600' :
                   'bg-blue-100 text-blue-600'
@@ -973,7 +1070,7 @@ const RequesterDashboard = () => {
                 }`}>
                   {request.status}
                 </span>
-                <button className="p-2 hover:bg-gray-200 rounded-full">
+                <button className="p-2 hover:bg-gray-200 rounded-full transition-colors">
                   <MoreVertical className="w-4 h-4 text-gray-500" />
                 </button>
               </div>
@@ -982,25 +1079,27 @@ const RequesterDashboard = () => {
         </div>
       </motion.div>
 
-      {/* Analytics Cards */}
+      {/* Analytics Cards with improved visuals */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Request Status Distribution</h3>
-          <div className="space-y-4">
+        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-lg p-6">
+          <h3 className="font-semibold text-gray-800 mb-6">Request Status Distribution</h3>
+          <div className="space-y-6">
             {[
               { label: 'Pending', value: 45, color: 'bg-yellow-500' },
               { label: 'In Progress', value: 30, color: 'bg-blue-500' },
               { label: 'Completed', value: 25, color: 'bg-green-500' }
             ].map((item) => (
               <div key={item.label}>
-                <div className="flex justify-between text-sm text-gray-600 mb-1">
-                  <span>{item.label}</span>
-                  <span>{item.value}%</span>
+                <div className="flex justify-between text-sm text-gray-600 mb-2">
+                  <span className="font-medium">{item.label}</span>
+                  <span className="font-bold">{item.value}%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div 
+                <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${item.value}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
                     className={`h-full ${item.color}`}
-                    style={{ width: `${item.value}%` }}
                   />
                 </div>
               </div>
@@ -1008,16 +1107,20 @@ const RequesterDashboard = () => {
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Blood Type Requirements</h3>
-          <div className="grid grid-cols-4 gap-3">
+        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-lg p-6">
+          <h3 className="font-semibold text-gray-800 mb-6">Blood Type Requirements</h3>
+          <div className="grid grid-cols-4 gap-4">
             {['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'].map((type) => (
-              <div key={type} className="text-center p-3 bg-gray-50 rounded-xl">
+              <motion.div 
+                key={type} 
+                className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
                 <div className="text-lg font-bold text-red-600">{type}</div>
-                <div className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-gray-500 mt-2">
                   {Math.floor(Math.random() * 10)} units
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -1044,20 +1147,22 @@ const RequesterDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-[80px] md:left-[280px] right-0 z-30 px-6 pt-6 bg-gray-50">
-        <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Hospital className="h-8 w-8 text-white" />
-              <div>
-                <h1 className="text-2xl font-bold text-white">Requester Dashboard</h1>
-                <p className="text-red-100 text-sm">Manage your blood requests efficiently</p>
+      {/* Fixed Header - Updated z-index to be lower than sidebar */}
+      <div className="fixed top-0 left-0 sm:left-[80px] md:left-[280px] right-0 z-30">
+        <div className="bg-gray-50 px-6 pt-6 pb-6">
+          <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Hospital className="h-8 w-8 text-white" />
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Requester Dashboard</h1>
+                  <p className="text-red-100 text-sm">Manage your blood requests efficiently</p>
+                </div>
               </div>
-            </div>
-            <div className="hidden sm:flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg">
-              <Building className="h-5 w-5 text-red-200" />
-              <span className="text-white font-medium">{profile.hospitalName}</span>
+              <div className="hidden sm:flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg">
+                <Building className="h-5 w-5 text-red-200" />
+                <span className="text-white font-medium">{profile.hospitalName}</span>
+              </div>
             </div>
           </div>
         </div>
