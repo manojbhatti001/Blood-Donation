@@ -48,7 +48,7 @@ const DashboardLayout = ({ children }) => {
 
   const renderMenuItem = (item) => {
     if (item.isDivider) {
-      return <div key="divider" className="my-2 border-t border-gray-200" />;
+      return <div key="divider" className="my-1 sm:my-2 border-t border-gray-200" />;
     }
 
     if (item.isDropdown) {
@@ -56,29 +56,35 @@ const DashboardLayout = ({ children }) => {
         <div className="relative" key={item.label}>
           <button
             onClick={() => setIsDashboardDropdownOpen(!isDashboardDropdownOpen)}
-            className={`w-full flex items-center px-3 py-3 rounded-lg transition-all duration-300 group ${
+            className={`w-full flex items-center px-2 sm:px-3 py-2 sm:py-3 rounded-lg transition-all duration-300 group ${
               isActivePath('/dashboard') || isActivePath('/requester-dashboard')
                 ? 'bg-red-50 text-red-600'
                 : 'text-gray-600 hover:bg-gray-50'
             }`}
           >
-            <item.icon className="w-5 h-5" />
+            <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
             {isOpen && (
               <div className="ml-3 flex-1 flex items-center justify-between">
-                <span>{item.label}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${isDashboardDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className="text-sm sm:text-base">{item.label}</span>
+                <ChevronDown 
+                  className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${
+                    isDashboardDropdownOpen ? 'rotate-180' : ''
+                  }`} 
+                />
               </div>
             )}
           </button>
           {isDashboardDropdownOpen && isOpen && (
-            <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg">
+            <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10">
               {item.options.map((option) => (
                 <Link
                   key={option.path}
                   to={option.path}
                   onClick={() => setIsDashboardDropdownOpen(false)}
-                  className={`block px-4 py-2 text-sm ${
-                    isActivePath(option.path) ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-red-50'
+                  className={`block px-3 sm:px-4 py-2 text-xs sm:text-sm ${
+                    isActivePath(option.path) 
+                      ? 'bg-red-50 text-red-600' 
+                      : 'text-gray-600 hover:bg-red-50'
                   }`}
                 >
                   {option.label}
@@ -95,17 +101,17 @@ const DashboardLayout = ({ children }) => {
         <button
           key={item.label}
           onClick={item.onClick}
-          className={`w-full flex items-center px-3 py-3 rounded-lg transition-all duration-300 group ${
+          className={`w-full flex items-center px-2 sm:px-3 py-2 sm:py-3 rounded-lg transition-all duration-300 group ${
             item.className || 'text-gray-600 hover:bg-gray-50'
           }`}
         >
-          <item.icon className={`w-5 h-5 ${
+          <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${
             item.className?.includes('text-red-600') ? 'text-red-600' : 'text-gray-500'
           }`} />
           {isOpen && (
             <div className="ml-3">
-              <p className="font-medium">{item.label}</p>
-              <p className="text-xs text-gray-500">{item.description}</p>
+              <p className="text-sm sm:text-base font-medium">{item.label}</p>
+              <p className="text-xs text-gray-500 hidden sm:block">{item.description}</p>
             </div>
           )}
         </button>
@@ -116,19 +122,19 @@ const DashboardLayout = ({ children }) => {
       <Link
         key={item.path}
         to={item.path}
-        className={`flex items-center px-3 py-3 rounded-lg transition-all duration-300 group ${
+        className={`flex items-center px-2 sm:px-3 py-2 sm:py-3 rounded-lg transition-all duration-300 group ${
           isActivePath(item.path)
             ? 'bg-red-50 text-red-600'
             : 'text-gray-600 hover:bg-gray-50'
         }`}
       >
-        <item.icon className={`w-5 h-5 ${
+        <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${
           isActivePath(item.path) ? 'text-red-600' : 'text-gray-500'
         }`} />
         {isOpen && (
           <div className="ml-3">
-            <p className="font-medium">{item.label}</p>
-            <p className="text-xs text-gray-500">{item.description}</p>
+            <p className="text-sm sm:text-base font-medium">{item.label}</p>
+            <p className="text-xs text-gray-500 hidden sm:block">{item.description}</p>
           </div>
         )}
       </Link>
@@ -322,90 +328,98 @@ const DashboardLayout = ({ children }) => {
   const menuItems = getDashboardMenuItems();
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Desktop Sidebar */}
       <motion.aside
         initial={false}
         animate={{ width: isOpen ? '280px' : '80px' }}
-        className={`fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-20`}
+        className="hidden md:block fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-20"
       >
-        {/* Logo Section */}
-        <div className="h-20 flex items-center justify-between px-4 mt-2">
+        {/* Logo Section - Desktop */}
+        <div className="h-16 sm:h-20 flex items-center justify-between px-3 sm:px-4">
           <motion.img
             initial={{ width: isOpen ? 150 : 40 }}
             animate={{ width: isOpen ? 150 : 40 }}
             transition={{ duration: 0.3 }}
             src="/images/logo1.png"
             alt="Logo"
-            className="object-contain mt-2"
+            className="object-contain cursor-pointer"
             onClick={handleLogoClick}
-            style={{ cursor: 'pointer' }}
           />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100"
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <ChevronRight
-              className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${
+              className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
                 isOpen ? 'rotate-180' : ''
               }`}
             />
           </button>
         </div>
 
-        {/* User Info */}
+        {/* User Info - Desktop */}
         {isOpen && (
-          <div className="px-4 py-3 border-b border-gray-200">
-            <p className="text-sm font-medium text-gray-900">
+          <div className="px-3 py-2 border-b border-gray-200">
+            <p className="text-sm font-medium text-gray-900 truncate">
               {location.pathname.startsWith('/requester-dashboard') 
                 ? (currentUser?.hospitalName || 'Hospital Name')
                 : (currentUser?.name || 'User Name')
               }
             </p>
-            <p className="text-xs text-gray-500">{currentUser?.email || 'user@example.com'}</p>
+            <p className="text-xs text-gray-500 truncate">{currentUser?.email || 'user@example.com'}</p>
           </div>
         )}
 
-        {/* Navigation Links */}
-        <nav className="flex-1 px-2 py-4 space-y-1">
+        {/* Navigation - Desktop */}
+        <nav className="flex-1 px-2 py-3 space-y-1 overflow-y-auto sidebar-scroll">
           {menuItems.map(renderMenuItem)}
         </nav>
       </motion.aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 ml-[80px] md:ml-[280px] flex flex-col h-screen">
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto">
-          <main className="p-6 relative">
-            {children}
-          </main>
+      {/* Main Content */}
+      <div className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300
+        ${isOpen ? 'md:ml-[280px]' : 'md:ml-[80px]'}`}>
+        <div className="flex-1 overflow-y-auto pt-16 md:pt-0">
+          <main className="p-4">{children}</main>
         </div>
       </div>
+
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileOpen(true)}
+        className="fixed top-4 left-4 z-30 p-2 bg-white rounded-lg shadow-lg md:hidden hover:bg-gray-50"
+      >
+        <Menu className="w-5 h-5 text-gray-600" />
+      </button>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileOpen && (
           <>
+            {/* Mobile Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileOpen(false)}
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
             />
+
+            {/* Mobile Sidebar */}
             <motion.aside
-              initial={{ x: -280 }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: -280 }}
+              exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25 }}
-              className="fixed top-0 left-0 h-full w-[280px] bg-white z-50 shadow-2xl lg:hidden"
+              className="fixed top-0 left-0 h-full w-[280px] bg-white z-50 shadow-xl md:hidden"
             >
-              {/* Logo Section */}
-              <div className="h-20 flex items-center justify-between px-4">
+              {/* Mobile Logo Section */}
+              <div className="h-16 flex items-center justify-between px-4">
                 <img
                   src="/images/logo1.png"
                   alt="Logo"
-                  className="h-12 w-auto cursor-pointer"
+                  className="h-8 w-auto cursor-pointer"
                   onClick={(e) => {
                     handleLogoClick(e);
                     setIsMobileOpen(false);
@@ -415,26 +429,29 @@ const DashboardLayout = ({ children }) => {
                   onClick={() => setIsMobileOpen(false)}
                   className="p-2 rounded-lg hover:bg-gray-100"
                 >
-                  <X className="w-6 h-6 text-gray-500" />
+                  <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
 
-              {/* Navigation Links */}
-              <nav className="px-2 py-4">
-                {menuItems.map(renderMenuItem)}
+              {/* Mobile User Info */}
+              <div className="px-4 py-3 border-b border-gray-200">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {location.pathname.startsWith('/requester-dashboard') 
+                    ? (currentUser?.hospitalName || 'Hospital Name')
+                    : (currentUser?.name || 'User Name')
+                  }
+                </p>
+                <p className="text-xs text-gray-500 truncate">{currentUser?.email || 'user@example.com'}</p>
+              </div>
+
+              {/* Mobile Navigation */}
+              <nav className="px-2 py-4 overflow-y-auto max-h-[calc(100vh-9rem)]">
+                {menuItems.map(renderMobileMenuItem)}
               </nav>
             </motion.aside>
           </>
         )}
       </AnimatePresence>
-
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="fixed top-4 left-4 z-20 p-2 bg-white rounded-lg shadow-lg md:hidden"
-      >
-        <Menu className="w-6 h-6 text-gray-600" />
-      </button>
     </div>
   );
 };
