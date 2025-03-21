@@ -7,6 +7,8 @@ import {
   User, Activity, Calendar, BarChart, TrendingUp,
   ArrowRight, MoreVertical, Bell, Lock, Building
 } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RequesterDashboard = () => {
   const location = useLocation();
@@ -113,6 +115,38 @@ const RequesterDashboard = () => {
     completedRequests: requestHistory.filter(r => r.status === 'Completed').length,
     totalDonors: activeRequests.reduce((acc, req) => acc + req.donors.length, 0)
   });
+
+  // Add this state near other state declarations
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  // Add this function with other helper functions
+  const handlePasswordChange = async () => {
+    try {
+      if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+        toast.error('All password fields are required');
+        return;
+      }
+      
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        toast.error('New passwords do not match');
+        return;
+      }
+
+      // Here you would typically make an API call to update the password
+      toast.success('Password updated successfully');
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error) {
+      toast.error('Failed to update password');
+    }
+  };
 
   // Get current section based on URL
   const getCurrentSection = () => {
@@ -784,6 +818,64 @@ const RequesterDashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Password Change Section */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Lock className="w-5 h-5 text-gray-500" />
+              Change Password
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <Lock className="w-5 h-5 text-gray-400" />
+                  <input
+                    type="password"
+                    value={passwordData.currentPassword}
+                    onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                    className="bg-transparent border-none focus:ring-0 flex-1"
+                    placeholder="Enter current password"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <Lock className="w-5 h-5 text-gray-400" />
+                  <input
+                    type="password"
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                    className="bg-transparent border-none focus:ring-0 flex-1"
+                    placeholder="Enter new password"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <Lock className="w-5 h-5 text-gray-400" />
+                  <input
+                    type="password"
+                    value={passwordData.confirmPassword}
+                    onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                    className="bg-transparent border-none focus:ring-0 flex-1"
+                    placeholder="Confirm new password"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handlePasswordChange}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                >
+                  <Lock className="w-4 h-4" />
+                  Update Password
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Sidebar */}
@@ -1172,6 +1264,7 @@ const RequesterDashboard = () => {
       <div className="relative mt-[144px] px-6 pb-6">
         {renderContent()}
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

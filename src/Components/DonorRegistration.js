@@ -10,17 +10,23 @@ export default function DonorRegistration() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    bloodType: '',
     phone: '',
-    address: '',
+    password: '',
+    confirmPassword: '',
+    bloodGroup: '',
     city: '',
     state: '',
-    ngoName: '',
-    ngoAddress: '',
     agreeToTerms: false
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -30,12 +36,23 @@ export default function DonorRegistration() {
       if (!formData.agreeToTerms) {
         throw new Error('Please agree to the terms and conditions')
       }
-
-      await register({
-        ...formData,
-        role: 'donor'
-      })
       
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error('Passwords do not match')
+      }
+
+      const registrationData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        bloodGroup: formData.bloodGroup,
+        city: formData.city,
+        state: formData.state,
+        userType: 'donor'
+      }
+
+      await register(registrationData)
       toast.success('Registration successful!')
       navigate('/donor-dashboard')
     } catch (error) {
@@ -150,6 +167,34 @@ export default function DonorRegistration() {
                   </div>
                 </div>
 
+                {/* Password and Confirm Password */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Password <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Confirm Password <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                    />
+                  </div>
+                </div>
+
                 {/* Location */}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -177,6 +222,8 @@ export default function DonorRegistration() {
                     />
                   </div>
                 </div>
+                {/* //passwordField */}
+                
 
                 {/* Optional NGO Info - Improved */}
                 <div className="mt-3 border-t pt-3">

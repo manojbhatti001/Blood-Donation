@@ -1,5 +1,0 @@
-# To revert the last 2 commits while keeping the changes in your working directory
-git reset HEAD~2
-
-# OR to revert the last 2 commits and remove the changes
-git reset --hard HEAD~2

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from "./Components/Navbar";
-import HomePage from "./Components/HomePage";
+import HomePage from "./Components/HomepageSections/HomePage";
 import EmergencyBlood from "./Components/EmergencyBlood";
 import Volunteer from "./Components/Volunteer";
 import Login from "./Components/Login";
@@ -15,9 +15,7 @@ import VehicleRegistration from "./Components/VehicleRegistration";
 import Register from './Components/Register';
 import HospitalRegistration from './Components/HospitalRegistration';
 import BloodRegistration from './Components/BloodRegistration';
-import DonorDashboard from "./Components/DonorDashboard";
-import RequesterDashboard from "./Components/RequesterDashboard";
-import DashboardLayout from './Components/DashboardLayout';
+import GallerySection from './Components/HomepageSections/GallerySection';
 
 export default function App() {
   return (
@@ -36,14 +34,7 @@ export default function App() {
           <Route path="/search-requests" element={<><Navbar /><SearchRequests /><Footer /></>} />
           <Route path="/register-vehicle" element={<><Navbar /><VehicleRegistration /><Footer /></>} />
           <Route path="/Blood-registration" element={<><Navbar /><BloodRegistration /><Footer /></>} />
-
-          {/* Dashboard routes */}
-          <Route path="/dashboard/*" element={<DashboardLayout><DonorDashboard /></DashboardLayout>} />
-          <Route path="/requester-dashboard/*" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
-          <Route path="/requester-dashboard/create" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
-          <Route path="/requester-dashboard/active" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
-          <Route path="/requester-dashboard/history" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
-          <Route path="/requester-dashboard/profile" element={<DashboardLayout><RequesterDashboard /></DashboardLayout>} />
+          <Route path="/gallery" element={<><Navbar /><GallerySection /><Footer /></>} />
         </Routes>
         <Toaster />
       </AuthProvider>

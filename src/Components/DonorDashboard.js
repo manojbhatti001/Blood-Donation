@@ -22,9 +22,14 @@ import {
   Activity,
   Shield,
   Star,
-  Users
+  Users,
+  Lock,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DonorDashboard = () => {
   const location = useLocation();
@@ -38,6 +43,14 @@ const DonorDashboard = () => {
   const [otp, setOtp] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
   
+  // Add this state for password modal
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
   // Dummy data states
   const [availableRequests, setAvailableRequests] = useState([
     {
@@ -683,10 +696,11 @@ const DonorDashboard = () => {
   const renderProfile = () => (
     <div className="space-y-6">
       {/* Profile Header */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center overflow-hidden">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-4 sm:p-6">
+        <div className="flex flex-col gap-4">
+          {/* Profile Info Section */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+            <div className="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center overflow-hidden shrink-0">
               {profileData.profileImage ? (
                 <img 
                   src={profileData.profileImage} 
@@ -697,9 +711,9 @@ const DonorDashboard = () => {
                 <User className="w-10 h-10 text-red-500" />
               )}
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white">{profileData.fullName}</h2>
-              <div className="flex items-center gap-3 mt-1">
+            <div className="text-center sm:text-left">
+              <h2 className="text-xl sm:text-2xl font-bold text-white">{profileData.fullName}</h2>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 mt-2">
                 <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white flex items-center gap-2">
                   <Droplet className="w-4 h-4" />
                   {profileData.bloodGroup}
@@ -711,10 +725,12 @@ const DonorDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-3">
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center gap-2 transition-colors"
+              className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
               {isEditing ? (
                 <>
@@ -730,10 +746,17 @@ const DonorDashboard = () => {
             </button>
             <button
               onClick={() => setShowCameraModal(true)}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center gap-2 transition-colors"
+              className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
               <Camera className="w-4 h-4" />
-              Update Photo
+              <span className="sm:inline">Update Photo</span>
+            </button>
+            <button
+              onClick={() => setShowPasswordModal(true)}
+              className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
+            >
+              <Lock className="w-4 h-4" />
+              <span className="sm:inline">Change Password</span>
             </button>
           </div>
         </div>
@@ -1131,6 +1154,21 @@ const DonorDashboard = () => {
     }));
   };
 
+  const handlePasswordChange = async () => {
+    try {
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        toast.error('New passwords do not match');
+        return;
+      }
+      // Add your password change API call here
+      toast.success('Password updated successfully');
+      setShowPasswordModal(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (error) {
+      toast.error('Failed to update password');
+    }
+  };
+
   // Get current section and render content
   const getCurrentSection = () => {
     const path = location.pathname;
@@ -1167,6 +1205,72 @@ const DonorDashboard = () => {
       <div className="relative mt-[120px] sm:mt-[144px] px-4 sm:px-6 pb-6">
         {renderContent()}
       </div>
+
+      {/* Add this password change modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Change Password</h3>
+              <button
+                onClick={() => setShowPasswordModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  value={passwordData.currentPassword}
+                  onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  value={passwordData.newPassword}
+                  onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                />
+              </div>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={() => setShowPasswordModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handlePasswordChange}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Update Password
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -12,6 +12,7 @@ export default function BloodRegistration() {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     bloodType: '',
     phone: '',
     address: '',
@@ -33,6 +34,10 @@ export default function BloodRegistration() {
     try {
       if (!formData.agreeToTerms) {
         throw new Error('Please agree to the terms and conditions')
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error('Passwords do not match')
       }
 
       await register({
@@ -177,6 +182,34 @@ export default function BloodRegistration() {
                       className="w-full p-1.5 text-sm border rounded"
                       value={formData.state}
                       onChange={(e) => setFormData({...formData, state: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                {/* Password Fields */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Password <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Confirm Password <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                     />
                   </div>
                 </div>
