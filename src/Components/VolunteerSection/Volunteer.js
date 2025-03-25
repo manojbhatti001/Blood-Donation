@@ -1,7 +1,7 @@
 import { Heart, Users, Calendar, Award, CheckCircle } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { AnimatedSection, fadeIn, slideIn, staggerContainer } from "./Animation"
+import { AnimatedSection, fadeIn, slideIn, staggerContainer } from '../Animation'
 import { toast } from 'react-hot-toast'
 
 export default function Volunteer() {

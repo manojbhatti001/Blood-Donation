@@ -3,22 +3,22 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from "./Components/NavbarSection/Navbar";
 import HomePage from "./Components/HomepageSections/HomePage";
-import EmergencyBlood from "./Components/EmergencyBlood";
-import Volunteer from "./Components/Volunteer";
-import Login from "./Components/Login";
-import HospitalLogin from "./Components/HospitalLogin";
+import EmergencyBlood from "./Components/EmergencyBloodSection/EmergencyBlood";
+import Volunteer from "./Components/VolunteerSection/Volunteer";
+import Login from "./Components/LoginSection/Login";
+import HospitalLogin from "./Components/VolunteerSection/HospitalLogin";
 import DonorRegistration from "./Components/DonorRegistration";
 import Footer from "./Components/FooterSection/Footer";
 import { Toaster } from 'react-hot-toast';
 import SearchRequests from "./Components/SearchRequests";
-import VehicleRegistration from "./Components/VehicleRegistration";
-import Register from './Components/Register';
-import HospitalRegistration from './Components/HospitalRegistration';
-import BloodRegistration from './Components/BloodRegistration';
+import VehicleRegistration from "./Components/VolunteerSection/VehicleRegistration";
+import Register from './Components/LoginSection/Register';
+import HospitalRegistration from './Components/VolunteerSection/HospitalRegistration';
 import GallerySection from './Components/HomepageSections/GallerySection';
 import DashboardLayout from './Components/DashboardLayout';
 import DonorDashboard from './Components/DonorDashboardSections/DonorDashboard';
-import RequesterDashboard from './Components/RequesterDashboard';
+import RequesterDashboard from './Components/RequesterDashboardSection/RequesterDashboard';
+import ForgotPassword from "./Components/LoginSection/ForgotPassword";
 
 export default function App() {
   return (
@@ -36,8 +36,8 @@ export default function App() {
           <Route path="/register-hospital" element={<><Navbar /><HospitalRegistration /><Footer /></>} />
           <Route path="/search-requests" element={<><Navbar /><SearchRequests /><Footer /></>} />
           <Route path="/register-vehicle" element={<><Navbar /><VehicleRegistration /><Footer /></>} />
-          <Route path="/Blood-registration" element={<><Navbar /><BloodRegistration /><Footer /></>} />
           <Route path="/gallery" element={<><Navbar /><GallerySection /><Footer /></>} />
+          <Route path="/forgot-password" element={<><Navbar /><ForgotPassword /><Footer /></>} />
 
           {/* Donor Dashboard Routes */}
           <Route path="/dashboard" element={<DashboardLayout><DonorDashboard /></DashboardLayout>} />

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Car, Phone, Calendar, MapPin, CheckCircle, AlertCircle, User, Hash, Users, FileText, Clock } from 'lucide-react'
 import { toast } from 'react-hot-toast'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 
 export default function VehicleRegistration() {
   const { user } = useAuth()

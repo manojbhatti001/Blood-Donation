@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Droplet, User, AlertCircle } from 'lucide-react';
+import { User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Register = () => {
   const navigate = useNavigate();
 
-  const handleOptionSelect = (type) => {
-    if (type === 'donor') {
-      navigate('/register-donor');
-    } else {
-      navigate('/Blood-registration');
-    }
+  const handleOptionSelect = () => {
+    navigate('/register-donor');
   };
 
   return (
@@ -38,7 +34,7 @@ const Register = () => {
           <div className="space-y-4">
             {/* Donor Registration Option */}
             <button
-              onClick={() => handleOptionSelect('donor')}
+              onClick={handleOptionSelect}
               className="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition-all group"
             >
               <div className="flex items-center">
@@ -48,25 +44,6 @@ const Register = () => {
                 <div className="ml-4 text-left">
                   <p className="text-lg font-medium text-gray-900">Donor Registration</p>
                   <p className="text-sm text-gray-500">Register as a blood donor and save lives</p>
-                </div>
-              </div>
-              <svg className="h-5 w-5 text-gray-400 group-hover:text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
-            </button>
-
-            {/* Blood Request Registration Option */}
-            <button
-              onClick={() => handleOptionSelect('request')}
-              className="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition-all group"
-            >
-              <div className="flex items-center">
-                <div className="bg-red-100 p-3 rounded-lg group-hover:bg-red-200">
-                  <AlertCircle className="h-6 w-6 text-red-600" />
-                </div>
-                <div className="ml-4 text-left">
-                  <p className="text-lg font-medium text-gray-900">Blood Request</p>
-                  <p className="text-sm text-gray-500">Submit an emergency blood request</p>
                 </div>
               </div>
               <svg className="h-5 w-5 text-gray-400 group-hover:text-red-500" viewBox="0 0 20 20" fill="currentColor">
