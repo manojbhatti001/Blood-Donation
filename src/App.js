@@ -16,8 +16,8 @@ import Register from './Components/LoginSection/Register';
 import HospitalRegistration from './Components/VolunteerSection/HospitalRegistration';
 import GallerySection from './Components/HomepageSections/GallerySection';
 import DashboardLayout from './Components/DashboardLayout';
-import DonorDashboard from './Components/DonorDashboardSections/DonorDashboard';
-import RequesterDashboard from './Components/RequesterDashboardSection/RequesterDashboard';
+import DonorDashboard from './Components/Dashboard/DonorDashboardSections/DonorDashboard';
+import RequesterDashboard from './Components/Dashboard/RequesterDashboardSection/RequesterDashboard';
 import ForgotPassword from "./Components/LoginSection/ForgotPassword";
 
 export default function App() {

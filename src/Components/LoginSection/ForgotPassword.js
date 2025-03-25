@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, KeyRound, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import ResetPassword from './ResetPassword';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -10,9 +11,7 @@ const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    otp: '',
-    newPassword: '',
-    confirmPassword: ''
+    otp: ''
   });
 
   const handleSendOTP = async (e) => {
@@ -45,27 +44,8 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (formData.newPassword !== formData.confirmPassword) {
-      toast.error('Passwords do not match!');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      // Add your API call here to reset password
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      toast.success('Password reset successful!');
-      navigate('/login');
-    } catch (error) {
-      toast.error('Failed to reset password. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <div className="pt-16"> {/* Added top-level container with padding-top */}
+    <div className="pt-16">
       <motion.div
         className="min-h-screen bg-gradient-to-br from-red-50 to-white flex flex-col justify-center py-12 sm:px-6 lg:px-8"
         initial={{ opacity: 0 }}
@@ -183,56 +163,12 @@ const ForgotPassword = () => {
 
             {/* Step 3: Reset Password */}
             {step === 3 && (
-              <motion.form
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                onSubmit={handleResetPassword}
-                className="space-y-6"
-              >
-                <div className="text-center mb-6">
-                  <p className="text-gray-600">Create a new password for your account.</p>
-                </div>
-                <div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                      type="password"
-                      required
-                      placeholder="New password"
-                      className="pl-10 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      value={formData.newPassword}
-                      onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                      type="password"
-                      required
-                      placeholder="Confirm new password"
-                      className="pl-10 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-                >
-                  {isSubmitting ? 'Resetting...' : 'Reset Password'}
-                </button>
-              </motion.form>
+              <ResetPassword 
+                onSuccess={() => navigate('/login')}
+                currentPassword={false}
+              />
             )}
+
             <div className="mt-6 pt-4 border-t border-gray-100">
               <button
                 onClick={() => step > 1 ? setStep(step - 1) : navigate('/login')}

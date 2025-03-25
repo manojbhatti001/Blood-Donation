@@ -4,6 +4,55 @@ import { toast } from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
+const indianStates = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
+  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
+  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+  "Uttarakhand", "West Bengal"
+];
+
+
+  const majorCities = {
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Tirupati", "Kakinada", "Rajahmundry", "Anantapur", "Kadapa"],
+    "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Namsai", "Tezu", "Roing", "Ziro", "Bomdila", "Tawang", "Along"],
+    "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon", "Diphu", "Golaghat"],
+    "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Arrah", "Begusarai", "Katihar", "Munger"],
+    "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Dhamtari", "Durg", "Mahasamund"],
+    "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Bicholim", "Curchorem", "Cuncolim", "Canacona", "Pernem"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Nadiad"],
+    "Haryana": ["Chandigarh", "Faridabad", "Gurugram", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat"],
+    "Himachal Pradesh": ["Shimla", "Mandi", "Dharamshala", "Solan", "Kullu", "Bilaspur", "Chamba", "Hamirpur", "Una", "Nahan"],
+    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh", "Deoghar", "Giridih", "Ramgarh", "Dumka", "Chaibasa"],
+    "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belgaum", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga"],
+    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Palakkad", "Alappuzha", "Kannur", "Kottayam", "Malappuram"],
+    "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", "Solapur", "Kolhapur", "Amravati", "Navi Mumbai"],
+    "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Senapati", "Ukhrul", "Chandel", "Tamenglong", "Jiribam", "Kakching"],
+    "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongstoin", "Williamnagar", "Baghmara", "Resubelpara", "Ampati", "Khliehriat", "Mairang"],
+    "Mizoram": ["Aizawl", "Lunglei", "Saiha", "Champhai", "Kolasib", "Serchhip", "Lawngtlai", "Mamit", "Khawzawl", "Hnahthial"],
+    "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha", "Zunheboto", "Mon", "Phek", "Kiphire", "Longleng"],
+    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada", "Jharsuguda"],
+    "Punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Pathankot", "Hoshiarpur", "Batala"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer", "Bhilwara", "Alwar", "Sikar", "Sri Ganganagar"],
+    "Sikkim": ["Gangtok", "Namchi", "Gyalshing", "Mangan", "Rangpo", "Singtam", "Jorethang", "Ravangla", "Soreng", "Nayabazar"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem", "Tiruchirappalli", "Tirunelveli", "Vellore", "Erode", "Thoothukkudi", "Dindigul"],
+    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam", "Ramagundam", "Secunderabad", "Mahbubnagar", "Nalgonda", "Adilabad"],
+    "Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailasahar", "Belonia", "Ambassa", "Khowai", "Teliamura", "Sabroom", "Amarpur"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Meerut", "Prayagraj", "Ghaziabad", "Noida", "Gorakhpur", "Aligarh"],
+    "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani", "Rudrapur", "Kashipur", "Rishikesh", "Pithoragarh", "Almora", "Nainital"],
+    "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri", "Bardhaman", "Malda", "Baharampur", "Krishnanagar", "Haldia"],
+    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "East Delhi", "West Delhi", "Central Delhi", "North East Delhi", "North West Delhi", "South East Delhi", "South West Delhi"],
+    "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kathua", "Udhampur", "Sopore", "Kupwara", "Pulwama", "Leh"],
+    "Andaman and Nicobar Islands": ["Port Blair", "Car Nicobar", "Mayabunder", "Rangat", "Diglipur", "Little Andaman", "Havelock Island", "Neil Island"],
+    "Chandigarh": ["Chandigarh"],
+    "Dadra and Nagar Haveli": ["Silvassa", "Amli", "Dadra"],
+    "Daman and Diu": ["Daman", "Diu", "Moti Daman", "Nani Daman"],
+    "Lakshadweep": ["Kavaratti", "Agatti", "Amini", "Andrott", "Minicoy"],
+    "Puducherry": ["Puducherry", "Karaikal", "Yanam", "Mahe"]
+  };
+
+
 export default function DonorRegistration() {
   const { register } = useAuth()
   const navigate = useNavigate()
@@ -11,6 +60,10 @@ export default function DonorRegistration() {
     name: '',
     email: '',
     phone: '',
+    age: '',
+    dateOfBirth: '',
+    pincode: '',
+    address: '',
     password: '',
     confirmPassword: '',
     bloodGroup: '',
@@ -27,6 +80,15 @@ export default function DonorRegistration() {
       [name]: type === 'checkbox' ? checked : value
     }))
   }
+
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      state: selectedState,
+      city: '' // Reset city when state changes
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -45,6 +107,10 @@ export default function DonorRegistration() {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        age: formData.age,
+        dateOfBirth: formData.dateOfBirth,
+        pincode: formData.pincode,
+        address: formData.address,
         password: formData.password,
         bloodGroup: formData.bloodGroup,
         city: formData.city,
@@ -167,6 +233,65 @@ export default function DonorRegistration() {
                   </div>
                 </div>
 
+                {/* Age and Date of Birth */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Age <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="18"
+                      max="65"
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.age}
+                      onChange={(e) => setFormData({...formData, age: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Date of Birth <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.dateOfBirth}
+                      onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                {/* Pincode and Address */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Pincode <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      pattern="[0-9]{6}"
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.pincode}
+                      onChange={(e) => setFormData({...formData, pincode: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">
+                      Address <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      required
+                      rows="1"
+                      className="w-full p-1.5 text-sm border rounded"
+                      value={formData.address}
+                      onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    />
+                  </div>
+                </div>
+
                 {/* Password and Confirm Password */}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -199,34 +324,45 @@ export default function DonorRegistration() {
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="block text-xs font-medium text-gray-700">
-                      City <span className="text-red-500">*</span>
+                      State <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       required
+                      name="state"
                       className="w-full p-1.5 text-sm border rounded"
-                      value={formData.city}
-                      onChange={(e) => setFormData({...formData, city: e.target.value})}
-                    />
+                      value={formData.state}
+                      onChange={handleStateChange}
+                    >
+                      <option value="">Select State</option>
+                      {indianStates.map(state => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700">
-                      State <span className="text-red-500">*</span>
+                      City <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       required
+                      name="city"
                       className="w-full p-1.5 text-sm border rounded"
-                      value={formData.state}
-                      onChange={(e) => setFormData({...formData, state: e.target.value})}
-                    />
+                      value={formData.city}
+                      onChange={handleChange}
+                      disabled={!formData.state}
+                    >
+                      <option value="">Select City</option>
+                      {formData.state && majorCities[formData.state]?.map(city => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 {/* //passwordField */}
                 
 
                 {/* Optional NGO Info - Improved */}
-                <div className="mt-3 border-t pt-3">
+                {/* <div className="mt-3 border-t pt-3">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-xs font-semibold text-gray-700">NGO Information</h3>
                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Optional</span>
@@ -258,7 +394,7 @@ export default function DonorRegistration() {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Terms */}
                 <div className="flex items-center bg-red-50/50 p-2 rounded text-xs mt-2">
@@ -312,4 +448,4 @@ export default function DonorRegistration() {
       </div>
     </div>
   )
-} 
+}
