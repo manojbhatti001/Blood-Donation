@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Calendar, Droplet, Heart, Share2 } from 'react-feather';
+import { Search, MapPin, Calendar, Droplet, Heart, Share2, Phone, User } from 'react-feather';
 import { Hospital, XCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,35 +9,18 @@ const AvailableRequests = ({ handleAcceptRequest }) => {
       requestId: 'REQ001',
       bloodGroup: 'A+',
       requesterName: 'John Doe',
-      location: 'Mumbai, Maharashtra',
+      // phone: '+91 98765-43210',
+      state: 'Maharashtra',
+      city: 'Mumbai',
+      location: 'Andheri East',
       status: 'Pending',
       hospitalName: 'City Hospital',
       urgencyLevel: 'High',
       unitsNeeded: 2,
-      requestDate: '2024-03-25'
+      requestDate: '2024-03-25',
+      address: '123, Healthcare Avenue'
     },
-    {
-      requestId: 'REQ002',
-      bloodGroup: 'O-',
-      requesterName: 'Sarah Smith',
-      location: 'Delhi, NCR',
-      status: 'Pending',
-      hospitalName: 'Apollo Hospital',
-      urgencyLevel: 'Critical',
-      unitsNeeded: 1,
-      requestDate: '2024-03-25'
-    },
-    {
-      requestId: 'REQ003',
-      bloodGroup: 'B+',
-      requesterName: 'Raj Patel',
-      location: 'Bangalore, Karnataka',
-      status: 'Pending',
-      hospitalName: 'Fortis Hospital',
-      urgencyLevel: 'Medium',
-      unitsNeeded: 3,
-      requestDate: '2024-03-24'
-    }
+   
   ]);
 
   return (
@@ -118,14 +101,29 @@ const AvailableRequests = ({ handleAcceptRequest }) => {
 
             {/* Request Details */}
             <div className="p-6 space-y-4">
+              {/* Requester Details */}
               <div className="space-y-3">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <User className="w-4 h-4" />
+                  <span className="text-sm font-medium">{request.requesterName}</span>
+                </div>
+                {/* <div className="flex items-center gap-2 text-gray-600">
+                  <Phone className="w-4 h-4" />
+                  <span className="text-sm">{request.phone}</span>
+                </div> */}
                 <div className="flex items-center gap-2 text-gray-600">
                   <Hospital className="w-4 h-4" />
                   <span className="text-sm">{request.hospitalName}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{request.location}</span>
+                  <span className="text-sm">{request.address}</span>
+                </div>
+                <div className="text-sm text-gray-600 pl-6">
+                  {request.location}, {request.city}
+                </div>
+                <div className="text-sm text-gray-600 pl-6">
+                  {request.state}
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Calendar className="w-4 h-4" />
@@ -137,16 +135,15 @@ const AvailableRequests = ({ handleAcceptRequest }) => {
               <div className="pt-4 flex gap-3">
                 <button
                   onClick={() => handleAcceptRequest(request)}
-                  className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <Heart className="w-4 h-4" />
-                  Donate Now
+                  Accept Request
                 </button>
-                <button 
-                  className="px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-                  onClick={() => {/* Add share functionality */}}
+                <button
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors duration-200"
                 >
-                  <Share2 className="w-4 h-4 text-gray-600" />
+                  <Share2 className="w-4 h-4" />
                 </button>
               </div>
             </div>

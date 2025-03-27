@@ -3,59 +3,64 @@ import { motion } from 'framer-motion';
 import { Plus, MapPin } from 'react-feather';
 import { toast } from 'react-toastify';
 
-const CreateRequest = ({ setShowNewRequestForm, setActiveRequests, activeRequests, setRequestHistory, requestHistory }) => {
+const majorCities = {
+  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Tirupati", "Kakinada", "Rajahmundry", "Anantapur", "Kadapa"],
+  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Namsai", "Tezu", "Roing", "Ziro", "Bomdila", "Tawang", "Along"],
+  "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon", "Diphu", "Golaghat"],
+  "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Arrah", "Begusarai", "Katihar", "Munger"],
+  "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Dhamtari", "Durg", "Mahasamund"]
+  // ... rest of the states and cities
+};
+
+const CreateRequest = ({ setShowNewRequestForm, activeRequests, setActiveRequests }) => {
+  // Function to get current date and time in local timezone
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   const [newRequest, setNewRequest] = useState({
+    patientName: '',
+    patientPhone: '',
     bloodGroup: '',
     units: '',
     urgencyLevel: 'Normal',
-    requiredDate: '',
+    requiredDate: getCurrentDateTime(),
     hospitalLocation: '',
-    patientDetails: '',
-    additionalNotes: '',
-    donors: []
+    state: '',
+    city: '',
+    additionalNotes: ''
   });
-
-  const handleCancelRequest = (requestId) => {
-    // Filter out the canceled request
-    const updatedRequests = activeRequests.filter(request => request.id !== requestId);
-    setActiveRequests(updatedRequests);
-    
-    // Add the canceled request to history
-    const canceledRequest = activeRequests.find(request => request.id === requestId);
-    if (canceledRequest) {
-      const historyEntry = {
-        id: `HIST${Date.now()}`,
-        bloodGroup: canceledRequest.bloodGroup,
-        hospitalName: canceledRequest.hospitalLocation.split(',')[0],
-        status: 'Cancelled',
-        date: new Date().toISOString().split('T')[0],
-        donorCount: canceledRequest.donors.length,
-        location: canceledRequest.hospitalLocation.split(',')[1].trim()
-      };
-      setRequestHistory([historyEntry, ...requestHistory]);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
       // Validate required fields
-      if (!newRequest.bloodGroup || !newRequest.units || !newRequest.requiredDate || !newRequest.hospitalLocation) {
+      if (!newRequest.patientName || !newRequest.patientPhone || !newRequest.bloodGroup || 
+          !newRequest.units || !newRequest.hospitalLocation ||
+          !newRequest.state || !newRequest.city) {
         toast.error('Please fill in all required fields');
         return;
       }
 
-      // Create new request with ID
+      // Create new request with ID and formatted data
       const newRequestWithId = {
-        ...newRequest,
         id: `REQ${Date.now()}`,
-        status: 'Active',
-        date: new Date().toISOString().split('T')[0]
+        ...newRequest,
+        status: 'Pending',
+        donors: [],
+        createdAt: new Date().toISOString().split('T')[0],
+        hospitalLocation: `${newRequest.hospitalLocation}, ${newRequest.city}, ${newRequest.state}`
       };
 
       // Add to active requests
-      setActiveRequests(prev => [...prev, newRequestWithId]);
+      setActiveRequests([newRequestWithId, ...activeRequests]);
       
       toast.success('Blood request created successfully');
       setShowNewRequestForm(false);
@@ -84,7 +89,40 @@ const CreateRequest = ({ setShowNewRequestForm, setActiveRequests, activeRequest
         {/* Form Content */}
         <div className="p-4">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Two columns layout */}
+            {/* Patient Details */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Patient Name */}
+              <div>
+                <label className="text-xs font-medium text-gray-700">
+                  Patient Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  required
+                  type="text"
+                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
+                  placeholder="Enter patient name"
+                  value={newRequest.patientName}
+                  onChange={(e) => setNewRequest({...newRequest, patientName: e.target.value})}
+                />
+              </div>
+
+              {/* Patient Phone */}
+              <div>
+                <label className="text-xs font-medium text-gray-700">
+                  Patient Phone <span className="text-red-500">*</span>
+                </label>
+                <input
+                  required
+                  type="tel"
+                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
+                  placeholder="Enter phone number"
+                  value={newRequest.patientPhone}
+                  onChange={(e) => setNewRequest({...newRequest, patientPhone: e.target.value})}
+                />
+              </div>
+            </div>
+
+            {/* Blood Group and Units */}
             <div className="grid grid-cols-2 gap-4">
               {/* Blood Group */}
               <div>
@@ -143,15 +181,14 @@ const CreateRequest = ({ setShowNewRequestForm, setActiveRequests, activeRequest
               {/* Required Date */}
               <div>
                 <label className="text-xs font-medium text-gray-700">
-                  Required By <span className="text-red-500">*</span>
+                  Current Date & Time <span className="text-red-500">*</span>
                 </label>
                 <input
                   required
-                  type="date"
-                  min={new Date().toISOString().split('T')[0]}
+                  type="datetime-local"
+                  value={getCurrentDateTime()}
                   className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
-                  value={newRequest.requiredDate}
-                  onChange={(e) => setNewRequest({...newRequest, requiredDate: e.target.value})}
+                  readOnly
                 />
               </div>
             </div>
@@ -159,44 +196,62 @@ const CreateRequest = ({ setShowNewRequestForm, setActiveRequests, activeRequest
             {/* Hospital Location */}
             <div>
               <label className="text-xs font-medium text-gray-700">
-                Hospital Location <span className="text-red-500">*</span>
+               Location <span className="text-red-500">*</span>
               </label>
-              <div className="mt-1 relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
+              <input
+                required
+                type="text"
+                className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
+                placeholder="Enter location"
+                value={newRequest.hospitalLocation}
+                onChange={(e) => setNewRequest({...newRequest, hospitalLocation: e.target.value})}
+              />
+            </div>
+
+            {/* State and City Selection */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-700">
+                  State <span className="text-red-500">*</span>
+                </label>
+                <select
                   required
-                  type="text"
-                  className="w-full rounded-lg border-gray-300 pl-10 pr-4 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
-                  placeholder="Enter hospital location"
-                  value={newRequest.hospitalLocation}
-                  onChange={(e) => setNewRequest({...newRequest, hospitalLocation: e.target.value})}
-                />
+                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
+                  value={newRequest.state}
+                  onChange={(e) => {
+                    setNewRequest({
+                      ...newRequest,
+                      state: e.target.value,
+                      city: '' // Reset city when state changes
+                    });
+                  }}
+                >
+                  <option value="">Select State</option>
+                  {Object.keys(majorCities).map(state => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-700">
+                  City <span className="text-red-500">*</span>
+                </label>
+                <select
+                  required
+                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
+                  value={newRequest.city}
+                  onChange={(e) => setNewRequest({...newRequest, city: e.target.value})}
+                  disabled={!newRequest.state}
+                >
+                  <option value="">Select City</option>
+                  {newRequest.state && majorCities[newRequest.state]?.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* Patient Details & Notes in one row */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-medium text-gray-700">Patient Details</label>
-                <input
-                  type="text"
-                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
-                  placeholder="Patient name & age"
-                  value={newRequest.patientDetails}
-                  onChange={(e) => setNewRequest({...newRequest, patientDetails: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-gray-700">Additional Notes</label>
-                <input
-                  type="text"
-                  className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm h-9"
-                  placeholder="Any additional info"
-                  value={newRequest.additionalNotes}
-                  onChange={(e) => setNewRequest({...newRequest, additionalNotes: e.target.value})}
-                />
-              </div>
-            </div>
+           
 
             {/* Form Actions */}
             <div className="flex justify-end gap-3 pt-2">
